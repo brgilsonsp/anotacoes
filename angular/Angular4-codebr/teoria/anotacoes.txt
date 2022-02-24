@@ -1,0 +1,7 @@
+Primeiro devemos criar o arquivo "tsconfig.json". Armazenará todas as configurações do projeto, o compilador consultará esse arquivo
+
+declarar variável: let <nomeVariavel>: <tripo> = <valor>. Pode usar o any (deixando o tipo em branco ou usar a palavra any, porém a variável ficará idem ao JS, aceitará qualquer tipo
+
+"compilerOption":{} >> objeto que será criado no tsconfig.json para 
+"outDir": "<nomeDiretorio" >> propriedade do objeto compilerOption para definir local dos arquivos JS. Obs:Se após alterar esse arquivo o Atom não atualizar, save algum arquivo .ts para o compiladro executar novamente e atualizar o pacote
+"noEmitOnError": true/false >> Quando true, não gera o arquivo JS se oorreu erro de compilação

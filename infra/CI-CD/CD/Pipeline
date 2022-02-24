@@ -1,0 +1,91 @@
+Etapas clássicas do Pipeline
+    1. Build unit tests (commit stage)
+        O começo de tudo é build, isto é o desenvolvedor vai construir o software.
+    2. Testes de aceitação automatizados
+        Depois da construção do software são executados os testes necessários. Por meio dos testes criamos relatórios sobre a qualidade do sistema. Se alguma etapa falhar ela é congelada por aqui e o artefato não é promovido.
+    3 Homologação UAT 
+        A próxima etapa - caso tudo ocorra como o esperado - é a promoção do artefato. Este é o ambiente classico de User Acceptance Testing, ou simplesmente homologação. Nesta fase não executados os testes mais complexos que não podem ser automatizados.
+    4. Produção
+        Depois da aprovação manual, iremos para o ambiente de produção, em que o artefato será de fato produzido de maneira segura.
+        Em produção ainde temos duas etapas para deixar a feature disponível para os consumidores, que são Deploy e Release:
+            * Deploy é colocar as alterações em produção (provisionar, configurar, instalar)
+            * Release é deixar as alterações visíveis
+
+Cada etapa citada constrói mais confiança no produto.Os testes não garantem tudo, mas diminuímos muito a probabilidade de erros. O ambiente de homologação deve ser o mais perecido o possível com o de produção para garantirmos a eficiência do deploy.
+
+O pipeline representa o processo de produção específico de uma equipe ou empresa, portanto não temos um padrão rígido.
+
+O processo de pipeline se inicia a cada comit que é testado separadamente. Nesta etapa os desenvolvedores utilizam ferramentas como Slack ou Telegram para se comunicarem sobre o estado do build, e se acontece algum problema toda a equipe é responsável.
+
+
+Boas práticas
+    Pipeline é a única forma de deploy
+        Não deve possuir formas concorrentes ou secundárias de deploy, o pipeline não deve ser o preferível deve ser o único, assim será possível garantir todos os steps automatizados
+    mantenha o pipeline o mais rápido possível
+        Um pipeline rápido não abre pretexte para possuir uma segunda forma de deploy, dessa maneira além da entrega ser mais rápido, o melhor ponto aqui é que o pipeline será usado com exclusividade
+    build apenas uma vez
+        O primeiro step do pipeline deve ser o build e esse artefato deve ser registrado (versionado) e utilizado em todos os demais steps do pipeline, inclusive até em produção
+    build independente do ambiente
+        O artefato precisa funcionar em qualquer ambiente, seja dev/homol/prod, mantenha as configurações de ambientes desacopladas do código, via arquivo de configuração por exemplo
+    ambientes efêmeros (temporários)
+        O ambiente deveria ser utilizado apenas para o devido fim e depois excluí-lo, por exemplo, o uso do docker, assim será possível sempre testar/usar o artefato conforme foi implementado
+    deploy para ambientes da maneira igual
+        Garantir que o deploy seja identico para todos ambientes (dev/hom/prod ou AAT/UAT/PROD), mantendo o mesmo script de todos os ambientes, assim teremos a garantia e confiança de cada step de testes
+
+A pipeline
+    Lembremos as etapas clássicas do pipeline: build unit test, AAT, UAT e Produção. A pipeline é a única forma de realizar o deploy, assim chegamos em um estado seguro para o ambiente de produção. Outro ponto importante é o que o pipeline deve ser ágil, isto é, o seu desempenho dever ser satisfatório na resolução de problemas.
+    Commit -> Aceitação Automatizada -> Homologação -> Produção
+     * Automated Acceptance Testing Stage (Testes de aceitação)
+     * User Acceptance Testing Stage (Homologação)
+
+    Estágios
+        Commit Stage: é a primeira etapa da pipeline, no commit a pipeline é iniciada.
+            Nesse estágio deve executar o build, os testes unitários e a análise da qualidade do código, como o sonar por exemplo. 
+            O build gerado nesse estágio deve ser utilizado em todos os estágios da pipeline, inclusivo no ambiente de produção, caso ocorra alteração no código, deve reiniciar a pipeline com o novo commit
+        Automated acceptance testing stage: é a segunda etapa da pipeline e só deve ser executada se a etapa anterior foi executada com sucesso.
+            Nesse estágio deve executar os testes a nível de negócio, os funcionais, que foram automatizadas. O ideal é a maior quantidade possível de testes que possa validar o funcionamento mínimo do artefato. Note que não há possibilidade de automatizador todos os testes, uma vez que ficaria muito caro (praticamente inviável) e demoraria muito a sua execução, devido a granuralidade de cenários.
+            Esses testes devem ser escritos com base nas especificações levantadas com negócio, QA e dev, por exemplo, pois serão identificadas as melhores oportunidades de testes que garantirão o funcionamento minímo do solução mesmo com a última alteração executada.
+            Esses testes tem que se basear na perspectiva do usuário, simulando a experiência do usuário, ou seja, como se clicasse nos botões, para cenários de front-end, ou nos valores esperados ao executar um recurso quando se tratar do contexto do back-end, por exemplo.
+            Antes de executarmos todos os testes - já que são demorados - faremos o que é conhecido como smoke tests, testes menores que garantirão que as partes fundamentais da aplicação estão operantes.
+            O resultado dessa operação é um relatório que notificará a equipe do status da aplicação. Esta é uma etapa muito importante, afinal é a última fase dos testes automatizados, em seguida teremos uma maior presença humana.
+            Em resumo, o que é tratado no contexto deste estágio:
+                esquipe define as especificações (analistas,qa,dev)
+                responsabilidade a equipe
+                smoke tests para o ambiente
+                mock de sistemas externos
+                bons requisitos
+                boas práticas no design e implementação de testes
+                desempenho não é o mais importante
+        User Acceptance Testing Stage - Homologação: 
+            Nesta fase os testes são executados pelo cliente, isto é, um usuário real do produto utiliza a interface do software, por isso essa etapa também é conhecida como "teste de aceitação".
+            A etapa de homologação não é tão precisa, não existe sempre uma completa aceitação ou rejeição por parte do usuário, mas pontos que precisam ser melhorados ou mantidos dentro do sistema.
+            Como existem várias pessoas envolvidas no projeto, cada uma terá uma visão diferente de negócio, e então com os feedbacks pequenas - ou grandes - mudanças serão requeridas.
+            Devemos lembrar que: "Our highest priority is to satisfy the customer through early and continuous delivery of valuable software".
+            Isto é, a máxima prioridade é satisfazer o cliente ao oferecermos um produto com valor e aplicação. Em resumo, esta etapa contém:
+                *- Testes manuais pelo cliente * O cliente consegue usar o sistema de acordo com o esperado? Realiza as ações requisitadas? Apresenta dificuldade
+                - Validar o software
+                - Usabilidade contínua
+                - Equipe participativa
+            Trata-se de um universo amplo: construção do modelo de estes, recriação do ambiente de produção e assim por diante, mas estes são os pontos principais testa etapa do pipeline.
+        Capacity testing stage - Teste de carga
+            Em paralelo a homologação, podemos executar o "Capacity Testing Stage". A pergunta que queremos responder é: como garantir que o software realmente suporta a quantidade de requisições, transações e acessos de usuários?
+            Criar esses cenários é algo complexo, existem ferramentas disponíveis e este é um conteúdo para um curso específico. O cenário de produção é algo dinâmico, pois precisamos pensar e reproduzir o comportamento dos usuários.
+            Os testes de carga buscam descobrir qual é a real capacidade do nosso sistema, ou seja, seu baseline. Conhecendo nosso sistema, devemos estabelecer metas claras e utilizar ferramentas de monitoração para descobrir as modificações arquiteturais que são necessárias.
+            Estes testes são mais caros devido a sua complexidade. Na fase de homologação não precisamos rodar a cada commit ou build, mas que o projeto seja monitorado desde o início. Podemos começar pelos testes de aceitação e criar um cenário, para elaborar os testes de carga ou fazer um replay dos dados de reprodução: gravamos o comportamento das requisições e realizamos um replay desses dados. Algumas ferramentas que podemos utilizar para isto são JMeter, Getling, Webbload, Apache Bench, LoadNinja.
+        Produção
+            Mesmo nesta fase, ainda pensaremos em como inserir nossa aplicação com o menor risco possível, mesmo tendo passado por diversas etapas que irão ampliar a segurança e estabilidade do sistema ao longo do processo.
+            Era comum no meio dos desenvolvedores utilizar alguns "carimbos" de qualidade do software, como o Pré-Alpha, Alpha, Beta, Release Candidate e Release. Hoje em dia utilizamos o pipeline, com etapas sofisticadas com releases durante o desenvolvimento do projeto.
+            Já aprendemos ao longo do curso que a tarefa de redução de riscos deve começar ao início do projeto, lembremos de:
+                deploy e pipeline desde a primeira interação em ambientes similares.
+                automação, one-click deploy e smoke test ambiente
+                aspectos arquiteturais: testability e deployability
+            Além desses pontos,temos o "The twelve-factor app", são 12 boas práticas documentadas que nos fornecerem uma referência de como a aplicação deve se comportar dentro de um ambiente de nuvem. Ainda tempos outras medidas para deixar o sistema ainda mais confiável na última fase do pipeline.
+            Já mencionamos que os deploys devem ser realizados de maneira contínua, este é o tema do nosso curso. Devemos realizar *releases incrementais *, mesmo que a funcionalidade seja grande devemos realizar a implementação e realizar o deploy, assim chegamos mais perto do estado final do sistema.
+            Sabemos eventualmente não podemos inserir o módulo de maneira parcial, por isso existe a técnica "Brench by Abstraction" que já discutimos no curso anterior. Criamos uma abstração dentro do código com dois caminho, em fase de desenvolvimento ele pode ser testado, embora na fase de produção ele não exista ainda.
+            A entrega contínua faz a diferença entre o deploy e o release, e até agora utlizamos essas duas palavras como se fossem a mesma coisa, e na verdade não o são.
+            Deploy é criar um ambiente, garantir que ele exista de maneira correta, instalar o software e configurá-lo. Já o release é a publicação de fato, o momento em que o cliente utiliza o produto.
+            Devemos desacoplar o deploy do release, e para isso existem estratégias como:
+                Blue/Green Deployment
+                Canary Releases
+                Feature Toggles (Feature Flags)
+            

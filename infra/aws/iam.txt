@@ -1,0 +1,81 @@
+IAM
+
+---------- Conceitos ---------------------------------------------------------------------------------------------------------------------------
+https://docs.aws.amazon.com/pt_br/IAM/latest/UserGuide/introduction.html
+O que é IAM
+	Serviço de gerenciamento de credenciais de acesso para pessoas ou entidades de dentro ou fora da sua conta
+	Gerenciamento de acesso para pessoas/grupos federados (Open ID e SAML, por exemplo)
+	Criação de roles assinando polices necessárias
+	As roles serão assumidas por entidades, inclusive em tempo de execução????
+	Criação de usuários assumindo determinadas polices ou dentro de um grupo de usuários
+	Criação de grupos de usuários assumindo determinadas polices
+	Criação de policies granulares (https://docs.aws.amazon.com/pt_br/service-authorization/latest/reference/reference.html)
+	Criação e gerenciamento de identity providers
+	Configurações da conta (policies de senhas, STS
+	Configuração do MFA
+	Reports e registro de logs com o Cloud Trail
+	Controla a autenticação e autorização da conta
+	
+	* Principal
+		É uma pessoa ou aplicação que consumirá os recursos da AWS na sua conta
+	
+	* Identity
+		É os objetos utilizados para identificar um Principal, por exemplo, client id e secret.
+	
+	* Entity
+		Os objetos utilizados na autenticação, por exemplo, um role
+	
+	* Resources
+		São os objetos do IAM, por exemplo, users, groups, roles e policies
+	
+	* Request
+		Quando um principal tenta executar uma ação no aws, seja no console, cli ou api, é enviado o seguinte envelope
+			- Ações (ou operações) – As ações ou as operações que o principal deseja executar. Pode ser uma ação no AWS Management Console, 
+			uma operação na AWS CLI ou na API da AWS.
+			- Recursos: o objeto de recurso da AWS no qual as ações ou operações são executadas.
+			- Principal – A pessoa ou o aplicativo que usou uma entidade (usuário ou função) para enviar a solicitação. As informações sobre 
+			a principal incluem as políticas associadas à entidade usada pela principal para fazer login.
+			- Dados do ambiente – Informações sobre o endereço IP, o agente de usuário, o status do SSL habilitado ou a hora do dia.
+			- Dados do recurso – Dados relacionados ao recurso que está sendo solicitado. Isso pode incluir informações como um nome da 
+			tabela do DynamoDB ou uma tag em uma instância do Amazon EC2.
+	
+	* Authentication
+		Quando o Principal envia suas credenciais para a AWS.
+		Pode utilizar o MFA, se configurado
+		Alguns recursos do S3 e STS não precisam de autenticação, porém isso é uma exceção
+	
+	* Authorization
+		Quando é efetuado um Request, é consultado os dados enviados no contexto para validar se o Principal Autenticado está autorizado a executar 
+		a Ação no Recurso informado
+		A conta root tem acesso full
+		Por padrão todas as solicitações são negadas, com exceção da conta root
+		Deve configurar as permissões para o Principal, inclusive se for configurado uma permissão para o root, essa permissão 
+		sobrepôem a padrão
+	
+	* Actions/Operation
+		Quando o Principal Autenticado e Autorizado, então é aprovado/negado a ação/operação no recurso desejado 
+		São as operações que o Principal pode executar em um recurso
+		Referência: https://docs.aws.amazon.com/pt_br/service-authorization/latest/reference/reference_policies_actions-resources-contextkeys.html
+		
+	* Recursos AWS
+		São objetos que existem dentro de um serviço/produto.
+		Por exemplo, um bucket dentro do S3, uma instância dentro do EC2, um usuário dentro do IAM
+		Os serviços definem as ações/operações que pode ser realizado dentro daquele recurso
+		Se solicitar uma ação/operação que não existe no recurso, então a requisição será negadas
+		Referência: https://docs.aws.amazon.com/pt_br/service-authorization/latest/reference/reference_policies_actions-resources-contextkeys.html
+	
+	Usuários Federados não possuem uma identidade permanente, então não podem ter policies ou pertencer a um user groups
+	Usuários Federados podem possuir roles, na Authentication será entregue uma Identity temporário com uma Role assumida
+	A Policy pode ser baseada em Identity ou Resource
+	A Policy baseada em Identity controla quais Actions/Operation pode realizar e em quais Resources e Conditions
+	
+O que é ABAC?
+	Attribute-base access control - Controle baseado em atributos
+	Define permissões baseados em atributos
+	Na AWS atributos são chamados de tags
+
+
+
+
+
+------------------------------------------------------------------------------------------------------------------------------------------------

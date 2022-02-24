@@ -1,0 +1,43 @@
+Angular CLI
+Gerando uma aplicação do zero
+no console, digite 
+ng new "nome-aplicação" --prefix="prefixoAplicação"
+Aguarde baixar todos os pacotes e a criação da estrutura.
+Para startar o servidor de desenvolvimento, dentro do diretório da aplicação digite
+ng serve
+
+
+Arquivos do projeto básico
+package.json >> configurações da aplicação, inclusive todas dependências
+angular-cli.json > arquivo de configuração do próprio Angular-CLI, podendo setar arquivos de scripts, arquivos de estilo, os assets (tudo que 
+estiver dentro desta página não será compilado, irá puro parao browser)
+
+
+
+webpack >> é uma biblioteca em JS responsável por criar bundles. Cria compila os arquivos para criar os bundles que dará o suporte a aplicação.
+	Polyfills >> API para aumentar a capacidade do browser para saber lidar com scripts antigos
+	main >> scripts da própria aplicação
+	styles >> arquivos de css que foram incluidos na aplicação
+	vendor >> contém os scripts de terceiros. API que outros fabricantes
+	inline >> script que carregará o webpack no browser para carregar toda a estrutura da aplicação startar o Angular no navegador
+o Webpack é startado no  nomento do "ng server". Os arquivos do webpack pode ser visto no final do arquivo html gerado pelo Angular.
+
+
+stylos.css >> estilos globais da aplicação. Esse arquivo esta configurado na propriedade "styles", no arquivo angular-cli.json
+polyfills.ts >> configuração de biblitecas que auxiliarão ao browser a dar suporte a versões antigas. Podemos configurar outras features
+também, como por exemplo, internacionalização
+
+
+bootstrap da aplicação
+primeiro bundle a carregar será o main.ts, o arquivo principal da aplicação. Esse arquivo contém alguns módulos de start. a função
+platformBrwoserdaynamic().bootstrapModule(appModule) carregará o módulo app.module.ts que contém as definições de todos os componentes da
+aplicação, todos os imports, providers e definirá quem será o component que fará o bootstrap que será o app.component.ts. O componente que 
+fará o bootstrap precisa ser listado na declations e também ser importado.
+Então o bootstrap será: main.ts > app.module.ts > app.component.ts > component definido
+app.module.ts >> contém as definições dos módulos da aplicação
+app.component.ts >> define os componentes de bootstrap. Será definido o nome do seletor, o template (podendedo ser uma URL ou inline) e, 
+opcionalmente, o styleUrls, que será um array com todos os estilos para esse componente.
+
+Gerar componente
+ng generate component (ou ng g c) nomeDoComponente --spec=false (não gerará os arquivo de teste) >> Comando precisa ser executado na raiz do 
+projeto. Será gerado o componente no diretorio app.

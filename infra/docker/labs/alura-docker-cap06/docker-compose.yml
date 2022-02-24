@@ -1,0 +1,66 @@
+version: '3'
+services: 
+    my_nginx: # nome do serviço
+        build: # instruções para criar a imagem
+            dockerfile: ./docker/nginx.dockerfile
+            context: .
+        image: brgilsonsp/my_nginx
+        container_name: my_nginx
+        ports: 
+            - "80:80" # porta do nginx configurada em ./docker/config/nginx.conf
+        networks:  # necessário ser um array
+            - 'production-net'
+        depends_on:  # necessário ser um array
+            - 'node1'
+            - 'node2'
+            - 'node3'
+    # host do DB defino no arquivo ./config/config.development.json
+    # não será definido o dockerfile pois será utilizado uma imagem pronta do mongo
+    mongodb_test:
+        image: mongo
+        networks:  # necessário ser um array
+            - production-net
+        container_name: mongodb # se o nome do serviço estiver diferente do configurado no arquivo ./config/config.development.json, então deve configurar o nome do container
+
+    # nome do host definido no nginx ./config/config.development.json
+    node1:
+        build: # esse build servirá para os serviços 2 e 3
+            dockerfile: ./docker/alura-books.dockerfile
+            context: .
+        image: brgilsonsp/alura-books
+        container_name: alura-books-1 # se for omitido, o nome do container será <DIRETORIO_CORRENTE>_<NOME_SERVICO>_<NUMERO>
+        ports: 
+            - '3000'
+        networks:  # necessário ser um array
+            - production-net
+        depends_on:  # necessário ser um array, inserir o nome do serviço
+            - 'mongodb_test'
+    node2:
+        #build: # não é necessário por já foi criado no serviço 1
+        #    dockerfile: ./docker/alura-books.dockerfile
+        #    context: .
+        image: brgilsonsp/alura-books
+        container_name: alura-books-2 # se for omitido, o nome do container será <DIRETORIO_CORRENTE>_<NOME_SERVICO>_<NUMERO>
+        ports: 
+            - '3000:3000'
+        networks: 
+            - production-net
+        depends_on:  # necessário ser um array, inserir o nome do serviço
+            - mongodb_test
+    node3:
+        build: # não é necessário por já foi criado no serviço 1
+            dockerfile: ./docker/alura-books.dockerfile
+            context: .
+        image: brgilsonsp/alura-books
+        container_name: alura-books-3 # se for omitido, o nome do container será <DIRETORIO_CORRENTE>_<NOME_SERVICO>_<NUMERO>
+        ports:
+            - '3000'
+        networks:  # necessário ser um array
+            - production-net
+        depends_on: # necessário ser um array, inserir o nome do serviço
+            - 'mongodb_test'
+
+networks: 
+    production-net:
+        driver: bridge
+        name: production-net

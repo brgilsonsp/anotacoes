@@ -1,0 +1,4 @@
+CloudFormation
+É um IaC (Infrastructure as a code), like TerraForm
+
+Helo world: https://cursos.alura.com.br/iac-com-aws-cloudformation-c1010

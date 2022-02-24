@@ -1,0 +1,8 @@
+Erro ao conectar banco de dados MySQL
+  { Error: ER_NOT_SUPPORTED_AUTH_MODE: Client does not support authentication protocol requested by server; consider upgrading MySQL client
+    at Handshake.Sequence._packetToError (/home/gilson/repo/fontes/estudos/node/projeto-rest/node_modules/mysql/lib/protocol/sequences/Sequence.js:47:14)
+    at Handshake.ErrorPacket (/home/gilson/repo/fontes/estudos/node/projeto-rest/node_modules/mysql/lib/protocol/sequences/Handshake.js:123:18)
+  Solução:
+    Acessar o banco de dados
+    Executar ALTER USER '<USER>'@'localhost' IDENTIFIED WITH mysql_native_password BY '<PASSWORD>';
+    Executar flush privileges;

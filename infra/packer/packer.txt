@@ -1,0 +1,4 @@
+Packer
+	Ferramenta para provisionar imagens na nuvem (aws, Azuere, Google, Docker, Digital Ocean etc)
+	
+https://www.packer.io/

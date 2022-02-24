@@ -1,0 +1,59 @@
+Mas o que é o Docker?
+    O Docker é um sistema de virtualização não convencional. Mas o que isso quer dizer? Em virtualizações convencionais temos um software instalado na máquina Host que irá gerenciar as máquinas virtuais (ex.: VirtualBox, VMWare, Parallels e etc...).
+
+    Para cada máquina virtual temos uma instalação completa do S.O. que queremos virtualizar, além de ter o próprio hardware virtualizado.
+
+    Se por exemplo eu precisar de uma biblioteca comum para todas as máquinas virtuais, preciso instalar em cada uma delas.
+
+    O Docker usa uma abordagem diferente, ele utiliza o conceito de container. Como assim container?
+
+Compreendendo o conceito de containers
+    Se pensarmos em transporte de cargas, container foi uma revolução nessa área. Pois antes deles o tempo de carregar e descarregar um navio era gigantesco e o trabalho era feito manualmente. Sem contar perdas (devido a quebras ou deterioração), desvio e outros problemas.
+
+    Com a chegada dos containers foi possível transportar mercadorias de uma forma segura, de fácil manipulação e com pouco, ou nenhum, trabalho braçal no carregamento ou descarregamento. E é justamente isso que o Docker tenta fazer com nossos softwares.
+
+Ganhos ao usar containers do Docker
+    Imagine nosso software como uma mercadoria a ser transportar como por exemplo, do ambiente de Desenvolvimento para Produção.
+
+    Para fazer isso precisamos garantir que nosso ambiente de Produção tenha todos os pré-requisitos instalados, de preferência uma versão do S.O. parecida com a do ambiente de Desenvolvimento entre outros cuidados que devem ser tomados (relacionados a permissionamento, serviços dependentes e etc...).
+
+    Com o Docker temos um container com nosso software. Esse container é levado inteiro para o outro ambiente.
+
+    Com isso não precisamos nos preocupar com pré-requisitos instalados no outro ambiente, versão do S.O., permissionamento e se quisermos podemos ter containers para os serviços dependentes também. Dessa forma minimizamos muito a divergência entre os ambientes.
+
+Mas como o Docker faz isso?
+    Essa ideia de container já é bem antiga e a princípio o Docker usava internamente um projeto chamado LXC (Linux Container).
+
+    O projeto LXC usa por baixo dos panos diversas funcionalidades presentes no Kernel do Linux. Abaixo vou listar algumas dessas funcionalidades:
+
+    * chroot - Reponsavel por mapear os diretórios do S.O. e criar o ponto de montagem (/, /etc, /dev, /proc entre outros).
+    * cgroup - Reponsável por controlar os recursos por processo. Com ele podemos por exemplo limitar o uso de memória e/ou processador para um processo específico.
+    * kernel namespace - Com ele podemos isolar processos, ponto de montagem entre outras coisas. Com esse isolamento, conseguimos a sensação de estar usando uma máquina diferente da máquina host. Pois enxergamos somente o ponto de montagem especifico e processos especificos, inclusive nossos processos começam com PID baixo.
+    * kernel capabilities - Entre outras coisas, conseguimos rodar alguns comandos de forma privilegiada.
+
+Como são feitas as imagens?
+    Nesse momento podemos pensar que o Docker é meio mágico (e é...kkk). Dado uma imagem ele pode rodar um ou mais containers com pouco esforço, mas como são feitas as images?
+
+    Uma imagem pode ser criada a partir de um arquivo de definição chamado de Dockerfile, nesse arquivo usamos algumas diretivas para declarar o que teremos na nossa imagem
+
+    Com um arquivo Dockerfile podemos compilá-lo com o comando docker build. Ao compilar um arquivo Dockerfile temos uma imagem
+
+
+Camadas de uma imagem
+    Quando baixamos a imagem do Ubuntu, reparamos que ela possui camadas, mas como elas funcionam? Toda imagem que baixamos é composta de uma ou mais camadas, e esse sistema tem o nome de Layered File System.
+
+    Essas camadas podem ser reaproveitadas em outras imagens. Por exemplo, se já temos a imagem do Ubuntu, isso inclui as suas camadas, e agora queremos baixar a imagem do CentOS e se o CentOS compartilha alguma camada que já tem na imagem do Ubuntu, o Docker é inteligente e só baixará as camadas diferentes, e não baixará novamente as camadas que já temos no nosso computador. Assim poupamos tempo, já que precisamos de menos tempo para baixar uma imagem.
+
+    Uma outra vantagem é que as camadas de uma imagem são somente para leitura. Mas como então conseguimos criar arquivos no container criado? O que acontece é que não escrevemos na imagem, já que quando criamos um container, ele cria uma nova camada acima da imagem, e nessa camada podemos ler e escrever. E com uma imagem base, podemos reaproveitá-la para diversos containers. Isso nos traz economia de espaço, já que não precisamos ter uma imagem por container.
+
+
+Multi-Stage build
+É um processo de criar imagens específicas para camadas de infraestrutura, por exemplo, instalação do node-packages, deixando a imagem da aplicação mais "pura" e leve
+https://cursos.alura.com.br/usando-docker-multi-stage-build-para-otimizar-a-imagem-c74 = Video
+https://docs.docker.com/develop/develop-images/multistage-build/ = Documentação
+
+
+Volumes
+https://cursos.alura.com.br/quais-sao-os-tipos-de-armazenamentos-no-docker--c134
+
+

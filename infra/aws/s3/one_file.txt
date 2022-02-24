@@ -1,0 +1,19 @@
+AWS Cli
+https://aws.amazon.com/pt/cli/
+https://docs.aws.amazon.com/cli/latest/reference/
+
+Necessário criar um usuário com access e client key no IAM
+
+Comandos geral
+	version: verifica a versão do CLI
+	configure: Configurar a sua sessão, o seu terminal
+		Necessário informar a region default, caso contrário, ao criar os recursos será necessário informar a region
+		
+Comandos S3 bucket
+	aws s3 ls >> lista os buckets
+	aws s3 mb s3://<recurso> >> cria um bucket
+	aws s3 rm s3://<recurso> >> remove um bucket ou um objeto
+	aws s3 mv s3://alura-s3/teste.txt s3://alura-s3/testando.txt >> renomeia (move) um objeto
+	aws s3 cp s3://<recurso_origem> <path_destino> >> copia o conteudo da origem para o caminho do destino
+	aws s3 sync s3://<recurso_origem> <destino> >> Synca o conteúdo do recurso origem no destino (pode ser um diretório local ou um outro bucket), pode fazer o caminho inverso, caso deseja syncar uma remoção deve acrescentar a flag --delete no final
+	

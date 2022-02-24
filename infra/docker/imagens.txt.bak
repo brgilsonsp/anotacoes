@@ -1,0 +1,10 @@
+MySQL 8
+	docker run --network host -e MYSQL_ROOT_PASSWORD=root -e MUSQL_DATABASE=teste -d --rm mysql:8.0.19
+	
+FTP
+	docker run -d -v C:/Users/brgil/ftp:/home/vsftpd --network host -p 20:20 -p 21:21 -p 47400-47470:47400-47470 -e FTP_USER=gil -e FTP_PASS=gil123 -e PASV_ADDRESS=127.0.0.1 --name ftp --restart=always bogem/ftp
+	docker run -d -v C:/Users/brgil/ftp:/home/vsftpd -p 20:20 -p 21:21 -p 47400-47470:47400-47470 -e FTP_USER=gil -e FTP_PASS=gil123 -e PASV_ADDRESS=127.0.0.1 --name ftp --restart=always bogem/ftp
+
+SQL Server
+	docker run -e "ACCEPT_EULA=Y" -e "SA_PASSWORD=yourStrong(!)Password" -e "MSSQL_PID=Express" -p 1433:1433 -d mcr.microsoft.com/mssql/server:2019-latest 
+	docker exec -it 16e9fe24ad /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P "yourStrong(!)Password"

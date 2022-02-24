@@ -1,0 +1,21 @@
+<?php include "../cadastro/dbinfo.cadastro"; ?>
+<html>
+<body>
+<h1>Testando Load balancer</h1>
+<?php
+  echo "<br/>";
+  echo DB_SERVER;
+  echo "<br/>";
+  echo DB_USERNAME;
+  echo "<br/>";
+  echo DB_PASSWORD;
+  echo "<br/>";
+  echo DB_DATABASE;
+  echo "<br/>";
+  echo gethostname();
+  echo "<br/>";
+?>
+
+
+</body>
+</html>

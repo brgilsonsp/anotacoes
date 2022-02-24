@@ -1,0 +1,76 @@
+Copy linux to linux AWS
+  scp -i <CHAVE_PEM> <ARQUIVO_COPIAR> <USUARIO_HOST>@<HOST>:<CAMINHO_HOST>
+  scp -i myAmazonKey.pem phpMyAdmin-3.4.5-all-languages.tar.gz ec2-user@mec2-50-17-16-67.compute-1.amazonaws.com:~/.
+  Cópia recursiva: scp -r -i [chave de acesso ao servidor].pem [diretório projeto Alura (default: site)] [usuário@DNS público do servidor na Amazon]:~
+  
+ Copy linux
+	cp -r <path_dir_source> <pah_dir_target> >> copia todo conteudo do diretório e subdiretórios
+
+Verificar portas
+  netstat -ltun
+  netstat -tlp
+  netstat -lntp (l = listen | n = port number | t = protocol TCP | p = PID número do processo)
+Verificar processos por porta
+	netstat -anp | grep <PORTA>
+	
+Matar processos
+	kill -9 <pid>
+
+Listar processos
+  ps -aux | less
+  ps aux | less
+
+
+Descompactar arquivos
+  Para descompactar rar: unrar x nomedoarquivo.rar.
+  Para descompactar tar: tar -xvf nomedoarquivo.tar.
+  Para descompactar tar.gz: tar -vzxf nomedoarquivo.tar.gz.
+  Para descompactar bz2: bunzip nomedoarquivo.bz2.
+  Para descompactar tar.bz2: tar -jxvf nomedoarquivo.
+
+
+Liberar portas no Firewall de seu servidor Linux, utilize o comando "iptables".
+	A sintaxe para uso é a seguinte: iptables -I INPUT -p tcp --dport 80 -j ACCEPT
+	INPUT: a direção do tráfego (INPUT = ENTRADA).
+	-p: o protocolo utilizado pela porta (no caso tcp/udp).
+	--dport: o número da porta onde o tráfego irá passar (80, 443, 6667).
+
+	Caso queira liberar uma porta UDP para um jogo, SA:MP por exemplo:
+	iptables -I INPUT -p udp --dport 7777 -j ACCEPT
+
+	Caso queira liberar uma porta TCP para Minecraft:
+	iptables -I INPUT -p tcp --dport 25565 -j ACCEPT
+
+	Caso queira simplesmente liberar todo o tráfego em todas as portas:
+	iptables -F; iptables -X
+
+
+ * Configura e instala  Apache 2
+sudo apt-get update -y
+sudo apt-get install apache2 -y
+sudo groupadd www
+sudo usermod -a -G www ubuntu
+sudo chown -R root:www /var/www
+
+Verificar serviço apache2
+	sudo /etc/init.d/apache2 status | stop | start
+	
+	
+Python
+	Servidor http
+		python3 -m http.server [PORT]
+		python -m SimpleHTTPServer [PORT]
+		
+curl
+	curl ifconfig.me >> IP público
+	
+Configurar variáveis de ambiente
+	# sudo vi /etc/environment
+		Incluir a variável, por exemplo Java
+			JAVA_HOME=<PATH>
+		Se for necessário mapear no PATH, deve referenciar, por exemplo
+			PATH=$PATH:$JAVA_HOME/bin
+		Salvar e sair
+	#sudo source /etc/environment
+		Para carregar para o contexto atual
+		s

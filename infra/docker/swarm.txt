@@ -1,0 +1,138 @@
+O que é Docker Swarm
+	É um orquestrador de containers. Ele será o responsável por gerenciar a saúde dos nossos containers e manter a estabilidade do negócio, criando ou destruindo  containers quando necessário. 
+	Devemnos criar um cluster com nós de swarm instalado e eleger quem será o manager e os workers. O manager fará a orquestração das tarefas para seus workers.
+	O docker swarm utiliza um dispatcher para definir qual será o container que irá processar a tarefa em questão. Essa definição é autônoma do docker swarm manager
+	
+--------------------- Configuração/Criação --------------------- 
+Para criar as VMs utiliza o docker machine, ele cria as VMs com o necessário para executar o docker swarm
+ * docker-machine create -d virtualbox vm1 >> Criar uma máquina virtual com o hostname vm1 e com o driver do virtualbox (o driver pode ser alterado)
+	-d amazonec2, para criar na amazon https://docs.docker.com/machine/examples/aws/
+	options amazon https://docs.docker.com/machine/drivers/aws/
+ * docker-machine ssh vm1 >> acessa a máquina vm1 
+ * docker-machine kill vm1 >> mata a vm1
+ * docker-machine rm vm1 >> remove a vm1 local e, se possuir, remoto, por exemplo, EC2
+ * docker-machine inspect vm1 >> inspeciona a VM1
+
+
+Redes
+	Driver bridge >>, escopo local, comunicação entre os containers em um mesmo host/nó
+	Driver host >> escopo local, comunicação entre o container e o host/nó
+	Driver overlay >> escopo do swarm, é criado no momento que inicia um swarm para a comunicação entre os containers de cluster, ou seja, podendo estar em host/nó diferentes, inclusive o driver é compartilhado entre os containers que estão no mesmo swarm. Ele também criptograda a comunicação entre os containers
+	Redes overlays criadas manualmente (User-Defined Overlay) permitem a comunicação entre serviços por seus nomes (Service Discovery)
+	As redes criadas com o driver overlay são listadas de maneira lazy para workers
+	
+Portas * Falta portas TCP
+	TCP port 2377 for cluster management communications
+	TCP port 2376 to swarm
+	TCP and UDP port 7946 for communication among nodes
+	UDP port 4789 for overlay network traffic
+	TCP port 22, to SSH
+	https://docs.docker.com/engine/swarm/swarm-tutorial/#open-protocols-and-ports-between-the-hosts
+	
+	Por mais que o driver overlay seja responsável por comunicar múltiplos hosts em uma mesma rede, também podemos conectar containers em escopo local criados com o comando docker container run em redes criadas com esse driver.
+	Para isso, basta no momento da criação da rede utilizarmos a flag --attachable
+		docker network create -d overlay --attachable my_overlay >> conecta tanto serviços como containers "standalone" em nossa rede my_overlay
+		
+		
+Volumes
+	Por padrão, tanto o Docker no modo standalone quanto o Docker Swarm, partilham apenas de um driver local para uso de volumes. Isso quer dizer que o Docker Swarm não possui, até então, solução nativa para distribuir volumes entre os nós.
+	Então, no exemplo do vídeo anterior, ao definirmos o volume para cada serviço, criamos um volume local dentro de cada nó que for executar a tarefa. Logo, os volumes não são compartilhados entre os diferentes nós do cluster.
+	Existem soluções que não são nativas do Docker Swarm para utilizar volumes distribuídos entre nós, que podem ser consultadas na Docker Store (https://hub.docker.com/search?category=volume&q=&type=plugin)
+	
+--------------------- Fim configuração --------------------- 
+
+--------------------- Manager --------------------- 
+Swarm
+ * docker swarm init --advertise-addr <IP_FISICO_VM:[PORT_EXPOSED]> >> Configura a máquina em questão como manager do cluster que será criado e defini o IP físico como utilizado para conexão dos workers. Opcionalmente você pode definir a porta, por padrão é exposta na 2377, sempre validar nas regras do firewall
+ * docker swarm join-token worker >> recupera o comando, com o token e IP, que deve ser utilizado para definir os workers do cluster
+ * docker swarm leave >> deixa o swarm
+Node
+ * docker node ls >> lista todas as máquinas do swarm com seus respectivos status e informando se são leader
+ * docker node ls --format "{{.Hostname}} {{.ManagerStatus}}" >> Lista apenas o hostname e o manager status dos nós
+ * docker node rm <ID_NODE> >> remove o nó <ID_NODE> do swarm, porém apenas os que estão com o status DOWN
+ * docker node inspect vm2 --pretty >> inspeciona informações da vm2, inclusive ip
+ * docker node demote vm1 >> rebaixa a vm1 para um worker
+ * docker node update --availability <"active"|"pause"|"drain"> >> aonde "drain é para o nó ficar indisponível para executar tarefas, será apenas gerenciamento
+
+Service create
+	- Na criação do serviço, por default, o docker swarm cria um serviço do modo replicado, ou seja, uma réplica do serviço é instanciado em determinado nó, podendo ser uma parte ou todos. Porém quando for necessário que um serviço seja instancia obrigatóriamente em todos os nós, podemos criá-lo definindo o modo global. A diferença entre definir global e definir réplicas é que serviço global roda em todos os nós já o replicado roda em um ou mais nós.
+ * docker service create -p <PORT_EXPOSED>:<PORT_INTERN> --mode global <IMAGE> >> Criará o serviço em todas as instâncias.
+	- Quando for necessár5io o uso do Service Discovery, uma forma de identificar o serviço através do nome e não do IP, é necessário a criação de uma rede com driver overlay e configurar essa rede no momento da criação do serviço. Com isso será possível acessar o serviço de outro container somente através do nome e não mais através do IP
+		1º criar a rede >> docker network 
+		2º Criar o serviço configurando nome e a rede >> docker service create --name <SERVICE_NAME> --network <REDE_CRIADA_PASSO_1>
+		Pronto, você já consegue comunicação entre containers pelo nome do serviço, pode fazer um teste com o comando ping informando o nome do serviço
+ * docker service create -p <PORT_EXPOSED>:<PORT_INTERN> <IMAGE> >> cria um serviço para executar o container criado a partir da imagem <IMAGE>, não precisa do -d pois o serviço por padrão não trava o terminal 
+ * docker service create -p <PORT_EXPOSED>:<PORT_INTERN> --constraint <CONTRAINT> <IMAGE> >> cria um serviço com uma regra de execução, por exemplo, --constraint-add node==worker, o serviço irá executar apenas nos nós worker
+ * docker service create -p <PORT_EXPOSED>:<PORT_INTERN> --replicas <INTEGER> <IMAGE> >> cria um serviço com uma quantidade de réplicas da tarefa, cada réplicado pode ou não ser executar em uma VM diferente
+ 
+Service update
+ * docker service update --constraint-add <CONTRAINT> << ID_SERVICE> >> Adiciona uma regra para o serviço, por exemplo, --constraint-add node==worker, o serviço irá executar apenas nos nós worker
+ * docker service update --constraint-add node.id==<ID_NODE> <ID_SERVICE> >> restringe o serviço ID_SERVICE apenas para o nó ID_NODE
+ * docker service update --constraint-add node.hostname==vm4 <ID_SERVICE> >> restrine o serviço ID_SERVICE apenas para vm4
+ * docker service update --constraint-rm node.id==<ID_NODE> <ID_SERVICE> >> remove a restrição de exectuar o serviço ID_SERVICE apenas para o nó ID_NODE
+ * docker service update --constraint-rm node.hostname==vm4 <ID_SERVICE> >> remove a restrição de exectuar o serviço ID_SERVICE apenas para vm4
+ * docker service update --replicas <INTEGER> <ID_SERVICE> >> altera o serviço para x tarefas replicadas, pode utilizar docker service scale <ID_SERVICE>=<INTEGER>
+ 
+Stack: Uma stack é uma pilha de serviços trabalhando em conjunto
+	Para verificar os serviços que foram criados, utilize os comandos docker service ***
+ * docker stack deploy --compose-file <PATH_FILE_COMPOSE_YML> <NAME_STACK> >> cria uma stack de serviços que foram configurados no arquivos PATH_FILE_COMPOSE_YML com o nome NAME_STACK
+ * docker stack services >> lista os serviços de uma stack
+ * docker stack ps <NAME_STACK> >> lista as tasks de uma stack
+ * docker stack ls >> lista as stacks
+ 
+ Para criar um cluster de container seguir os passos:
+	1º Criar as VMs que farão parte do cluster
+	2º Iniciar o manager
+	3º Inserir os workers
+	4º Criar um serviço
+	5º Docker iniciou a orquestração
+	 ROUTING MESH >> Responsável por redirecionar a requisição para o nó que está rodando a aplicação na porta solicitada, pode efetuar a requisição em qq IP do cluster
+	
+ Para analisar os serviços
+	* docker service ls >> lista todos os serviços
+	* docker service ls --format "{{.Name}} {{.Ports}}" >> Lista apenas o nome e a porta dos serviços
+	* docker service ps <SERVICE_ID> >> lista os workers que estão executando a tarefa do serviço
+	
+ Backup do manager
+	Fazer o backup de todo o conteúdo do diretório /var/lib/docker/swarm
+	Quando for necessário recriar o swarm
+		Primeiro criar o diretório /var/lib/docker/swarm, se não existir
+		Forçar utilizar os arquivos copiados com o comando
+			docker swarm init --force-new-cluster --advertise-addr <IP_FISICO_VM:[PORT_EXPOSED]> 
+		Pronto, swarm restabelecido, inclusive os serviços que estavam rodando até o momento do ultimo backup
+		
+
+
+
+--------------------- Fim manager --------------------- 
+--------------------- Workers --------------------- 
+ * docker swarn join --toekn <DOCKER_MANAGER> <IP_FISICO_MANAGER> >> Configura a VM em questão como um worker do cluster gerenciado pela token e IP informado. Observação, eses dados são obtidos no host manager
+ * docker swarm leave >> Fica como down no warm, mas ainda dentro do swarm, apenas o manager pode removê-lo
+
+--------------------- Fim workers --------------------- 
+
+--------------------- troubleshooting --------------------- 
+	Error response from daemon: rpc error: code = Unavailable desc = connection closed
+		Confirmar o token, ip e porta
+		
+	Error response from daemon: Timeout was reached before node joined. The attempt to join the swarm will continue in the background. Use the "docker info" command to see the current swarm status of your node.
+		Verificar se fecha conexão no IP e porta via telnet
+	
+	Problema com o Reachable após Leader cair
+		Não pode ter apenas dois managers, tem que ser um número maior que 2 senão ocorrer problema com a promoção do leader
+		
+	RAFT
+		Algoritmo para definir o novo leader, caso o leader atual caia
+		O ideal é ter no mínimo 3 ou 5, 7 e no máximo 9 managers
+		Não é aconselhável muitos managers, pois terá impacto na performance
+		Não é aconselhável ter apeas 1 ou 2 managers, pois em uma queda ocorrerá problemas com o cluster
+		Regras do RAFT, onde é o número de managers
+			Suporte (N-1)/2 falhas
+			Dever no mínimo (N/2)+1 de quórum para eleição
+		Quando possui apenas 2 manager, ocorrerá problemas quando o leadedr cair
+			
+	
+--------------------- Fim troubleshooting --------------------- 
+
+
+imagem do curso: aluracursos/barbearia

@@ -1,0 +1,87 @@
+RabbitMQ
+	- Intermediador de mensagens (broker)
+	- Processa cerca de 20k mensagens por segundo
+	- Protocolos: HTTP, AMQP
+	- Possui um PRODUTOR que envia as MENSAGENS para o BROKER. O BROKER possui um EXCHANGE que roteia as MENSAGENS para as FILAS e os CONSUMERS recebem as mensagens das FILAS
+	- Modo PUSH, as FILAS que enviam as MENSAGENS para os CONSUMERS que estão inscritos
+	- Recebe confirmação do CONSUMERS quando envia a MENSAGEM
+	- Consumidores competitivos, ou seja, apenas um dos consumidores inscritos receberá a MENSAGEM, não é possívvel enviar para todos CONSUMERS inscritos na fila
+	- Não armazena mensagem. Após enviar a mensagem para o CONSUMER e receber a confirmação ok do CONSUMER, então a MENSAGEM é removida
+		* E quando dá erro?
+	- É possível que FILAS ou MENSAGENS possui priorização
+	- Possui interface de gerenciamento
+	- Permiti roteamento flexivel, pode configurar o EXCHANGE para rotear por troca direta, tópicos, fan out (vários incritos) etc
+		* O que é roteamento flexivel?
+	- Indicao quando a solução necessita:
+		- Quando necessita dos protocolos de mercado
+		- Roteamento flexivel
+		- Priorização de MENSAGENS
+
+Kafka
+	- Barramento de mensagens
+	- Processa cerca de 100k por segundo
+	- Protocolos: mensagens primitivas e binárias
+	- Possui um PRODUTOR que envia a MENSAGEM para um CLUSTER. o CLUSTER redireciona a MENSAGEM para um dos BROKERS. O BROKER possui um TÓPICO, e um TÓPICO é dividido em várias PARTIÇÕES, sendo assim o TÓPICO direciona as MENSAGEM para as PARTIÇÕES. Os CONSUMERS são inscritos nas PARTIÇÕES.
+		* O CONSUMER se inscreve no TÓPICO ou PARTIÇÃO ou é possível em ambos?
+	- Modo PULL, ou seja, os CONSUMERS que vão até as PARTIÇÕES para pegar as MENSAGENS
+	- Múltiplos consumidores , ou seja, mais de um CONSUMER pode receber a mesma MENSAGEM, pois o CONSUMER se inscreve em uma PARTIÇÃO e o TÓPICO consegue enviar uma mesma MENSAGEM para mais de uma PARTIÇÃO
+		* O CONSUMER se inscreve no TÓPICO ou PARTIÇÃO ou é possível em ambos?
+	- Log de armazenamento de todas as MENSAGENS, pode configurar por espaço de memória ou tempo
+	- Não é possível priorizar MENSAGENS, modelo FIFO
+	- Não possui interface de gerenciamento, para gerenciar deve integrar com ferramentas externas
+	- Não permiti roteamento flexivel
+	- Indicado quando a solução necessida:
+		- Alto fluxo de processamento de mensagem
+		- Múltiplos CONSUMERS
+		- Log das MENSAGENS
+		
+SNS
+	- Simple Notification Service
+	- Sistema Pub/Sub
+	- Publica a MENSAGEM em um TÓPICO que entrega a MENSAGEM para vários CONSUMERS(fan out) incritos. Os CONSUMERS podem ser de difentes tipos (SQS, Lambda, API, etc)
+		* Garante a entrega da MENSAGEM para todos CONSUMERS?
+	- Alta disponibilidade, escalável horizontalmente automaticamente
+	- Durável
+		* As MENSAGENS são persistidas mesmo após entregue?
+	- Mantem as MENSAGENS seguras utilizando o AWS KMS Keys
+	- Permite o filtro das MENSAGENS. MENSAGEM pode ser enviada para diferente CONSUMERS baeado no campo da MENSAGEM
+	- Agnóstico ao idioma
+	- Retentativa de entrega da MENSAGEM ao CONSUMER pode default
+	- 
+	- Indicando quando a solução necessida:
+		- Que outras aplicações (desconhecidos no momento do desenho) necessita ser informada sobre o evento
+	
+
+SQS
+	- Simple Queue Service
+	- Sistema de gerenciamento de MENSAGENS enfileiradas
+	- O PRODUTOR envia a MENSAGEM na FILA e o CONSUMER recebe a MENSAGEM, é possível configurar para tipo de filas STANDARD e FIFO
+	- O CONSUMER pode buscar a MENSAGEM na FILA ou a MENSAGEM pode ser enviada ao CONSUMER com um trigger
+	- A MENSAGEM será entregue a apenas um CONSUMER
+	- FIFO: 
+		Garente a ordem das MENSAGENS
+		MENSAGENS seguem examente um processamento
+		Configuração de desduplicação evita duplicar MENSAGEM entregue
+		300 MENSAGEM/segundo, com o batch configurado poded processar 3000/seg
+		$0,50/milhão/requisição/mês
+	- Padrão (STANDARD): 
+		Não garnte a ordem
+		MENSAGEM pode ser enviada mais de uma vez
+		Perto de ilimitado MENSAGEM processada por segundo
+		0,40/milhão/requisição/mês
+		* Utiliza o batch?
+	- Confiável, garante a entrega ao CONSUMER
+	- DLQ: Dead letter queues podem ser habilitadas. É utilizado para armazenar as MENSAGENS que não foram entregues, que ocorreram erro
+	- Retentativa de entrega da MENSAGEM ao CONSUMER, faz até 3 tentativas, se todas falharem joga para o DLQ
+		* É configurável, tanto o retry quanto a quantidade de retry?
+	- Cada MENSAGEM processada pelo CONSUMER é excluída do SQS
+	- Alta disponibilidade, escalável horizontalmente automaticamente
+	- Mantem as MENSAGENS seguras utilizando o AWS KMS Keys
+	- Converte do padrão síncrono para o assíncrono
+		* Como assim???
+	- Processa em batch
+	- Possui métricas
+	- Escopo regional, ou seja, um SQS da region de SP é diferente do SQS da region da Virginia
+	- Indicando quando a solução necessida:
+		A sua aplicação necessita obter um evento(MENSAGEM)
+	

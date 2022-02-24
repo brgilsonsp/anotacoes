@@ -1,0 +1,150 @@
+1º Entendimento do conteúdo abordado, procurar na documentação oficinal do treinamento:
+	# AWS-Certified-Cloud-Practitioner_Exam-Guide.pdf
+2º Estudo conforme a documentação acima >> 22horas
+	# Visão Geral: https://aws.amazon.com/pt/getting-started/fundamentals-overview/?e=gs2020&p=gsrc >> 1hora
+	# Conceitos: https://aws.amazon.com/pt/getting-started/fundamentals-core-concepts/?e=gs2020&p=gsrc >> 6horas
+	aws-overview.pdf >> 6horas
+	how-aws-pricing-works.pdf >> 3horas
+	Curso: 	https://aws.amazon.com/pt/training/digital/aws-cloud-practitioner-essentials/?cp=sec&sec=prep >> 6horas (não fiz)
+3º Simulados >> 6horas
+	Oficial: https://explore.skillbuilder.aws/learn/course/internal/view/elearning/9161/aws-certification-official-practice-question-sets-portuguese-brazil
+	Udemy com a licença do banco
+	Mínimo de 3 simulados com pontuação >= 85 para avançar para o 4º passo, caso contrário retornar passo 2
+4º Exame
+	Marcar prova >> 03/02 >> 05/02
+	Efetuar prova
+	Agradecer a Deus e comemorar
+5º Lições aprendidas
+	Melhorar processo
+	Compartilhar
+		
+	
+Serviços de computação
+	• Amazon EC2 
+	• Amazon EC2 Container Service 
+	• Amazon EC2 Container Registry 
+	• Amazon Lightsail 
+	• AWS Batch 
+	• AWS Elastic Beanstalk 
+	• AWS Lambda 
+	• Auto Scaling	
+Serviços de Armazenamento
+	• Amazon S3
+	• Amazon Elastic Block Store
+	• Amazon Elastic File System
+	• Amazon Glacier
+	• AWS Storage Gateway	
+Serviços de banco de dados
+	• Amazon Aurora
+	• Amazon RDS
+	• Amazon DynamoDB
+	• Amazon ElastiCache	
+Serviços de Migração
+	• AWS Application Discovery Service
+	• AWS Database Migration Service
+	• AWS Server Migration Service
+	• AWS Snowball
+	• AWS Snowball Edge
+	• AWS Snowmobile
+Serviços de Rede e entrega de conteúdo
+	• Amazon VPC
+	• Amazon CloudFront
+	• Amazon Route 53
+	• AWS Direct Connect
+	• Elastic Load Balancing
+Serviços de Ferramenta de Desenvolvedor
+	• AWS CodeCommit
+	• AWS CodeBuild
+	• AWS CodeDeploy
+	• AWS CodePipeline
+	• AWS X-Ray	
+Serviços Ferramentas de Gerenciamento
+	• Amazon CloudWatch
+	• Amazon EC2 Systems Manager
+	• AWS CloudFormation
+	• AWS CloudTrail
+	• AWS Config
+	• AWS OpsWorks
+	• AWS Service Catalog
+	• AWS Trusted Advisor
+	• AWS Personal Health Dashboard
+	• AWS Managed Services
+Serviços de Segurança Conformidade e Identidade (IAM)
+	• Amazon Cloud Directory
+	• AWS Identity and Access Management
+	• Amazon Inspector
+	• AWS Certificate Manager
+	• AWS CloudHSM
+	• AWS Directory Service
+	• AWS Key Management Service
+	• AWS Organizations
+	• AWS Shield
+	• AWS WAF
+Serviços Análise
+	• Amazon Athena
+	• Amazon EMR
+	• Amazon CloudSearch
+	• Amazon Elasticsearch Service
+	• Amazon Kinesis
+	• Amazon Redshift
+	• Amazon QuickSight
+	• AWS Data Pipeline
+	• AWS Glue
+Serviços Inteligência Artificial
+	• Amazon Lex
+	• Amazon Polly
+	• Amazon Rekognition
+	• Amazon Machine Learning
+Serviços Móveis
+	• AWS Mobile Hub
+	• Amazon Cognito
+	• Amazon Pinpoint
+	• AWS Device Farm
+	• AWS Mobile SDK
+	• Amazon Mobile Analytics
+Serviços de aplicações
+	• AWS Step Functions
+	• Amazon API Gateway
+	• Amazon Elastic Transcoder
+	• Amazon SWF
+Serviços de Sistema de mensagens
+	• Amazon SQS
+	• Amazon SNS
+	• Amazon SES
+Serviço de Produtividade empresarial
+	• Amazon WorkDocs
+	• Amazon WorkMail
+	• Amazon Chime
+Serviços de Streaming de desktop e aplicações
+	• Amazon WorkSpaces
+	• Amazon AppStream 2.0
+Serviços Internet das Coisas (IoT)
+	• AWS IoT Platform
+	• AWS Greengrass
+	• AWS IoT Button
+Serviços de Desenvolvimento de jogos
+	• Amazon GameLift
+	• Amazon Lumberyard
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	

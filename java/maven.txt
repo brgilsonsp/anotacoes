@@ -1,0 +1,9 @@
+Criar projeto Maven
+Criar manualmente com quick start
+	Doc https://maven.apache.org/archetypes/maven-archetype-quickstart/
+	mvn archetype:generate \ 
+		-DarchetypeGroupId=org.apache.maven.archetypes \ 
+		-DarchetypeArtifactId=maven-archetype-quickstart \
+		-DarchetypeVersion=1.4 \
+		-DgroupId={group ID} \
+		-DartifactId={project_name}

@@ -1,0 +1,40 @@
+VPC
+https://docs.aws.amazon.com/vpc/latest/userguide/what-is-amazon-vpc.html
+Virtual Private Cloud, é a cama de rede para as instâncias do EC2.
+No VPC é configurado quais serão as zonas de disponibilidades da sua aplicação e as configurações de rede, como firewall, NAT, etc. O VPC consiste:
+	* VPC - sua rede virtual
+	* Subnet - O range de IP para a VPC
+	* Route table - Configuração de rotas do tráfego da sua rede
+	* Internet Gateway - um gateway para anexar a sua rede a internet e outras VPCs para troca de dados
+	* VPC endpoint - Habilita sua rede para, de forma privada, conectar sua VPC para dar suporte de seus serviços utilizando PrivateLink sem a necessidade de internet gateway, dispositivos NAT, conexão VPN ou AWS Direction Connection
+	* CIDR block - Roteamento entre inter-dominios sem classe. 
+	
+Por default a Amazon cria uma VPC com ao menos 3 sub-redes, sem cada sub-rede em uma zona de disponibilidade da região em questão.
+
+Como funciona: https://docs.aws.amazon.com/vpc/latest/userguide/how-it-works.html
+	Uma VPC, está dentro de uma region. A region é um parque de data centers, por exemplo, São Paulo sa-east-1. A VPC possui zonas de disponibilidades, dependendo da region pode ser 3 ou mais zonas. A zona de disponibilidade é um Data Center. Cada zona é demilitada por uma sub-rede, sendo assim as instâncias em um zona só conversam com as instâncias da mesma zona. Entre as zonas, dentro de uma VPC, é possível configurar um Router, que fará a comunicação entre as zonas de disponibilidades, possibilitando que as instâncias de uma zona converse com as instâncias de outra zona. Dentro da Region é configurado um Internet Gateway, que é "amarrado" a uma VPC. O Internet Gateway tem o papel de fazer o NAT da instância para a internet. Porém o Internet Gateway não conversa com as instâncias e sim com o Router. Então o Router tem o papel de abrir a comunicação de uma intância com outras instâncias de outra Zona e também com o Internet Gateway que disponilizará essa instância para acesso de/para internet.
+	Na camada de segurança a AWS possui duas configurações, o security-group e a ACL. O security-group configura as rotas (como um firewall) que configura o tráfego de entrada/saída dos pacotes a nível de instância. A ACL também configura o tráfego de entrada/saída dos pacotes, porém a nível de rede sub-rede. Um security-group fica associado a instância, sendo que uma instância pode possuir um ou mais security-groups, já a ACL é associada a uma sub-rede e uma sub-rede pode estar associado a apenas uma ACL, quando você associa uma sub-rede a uma ACL, caso essa sub-rede possua outra ACL então automaticamente será removida da ACL antiga e associada a nova ACL configurada.
+
+
+	
+	
+Quais modelos de VPC possui:
+	* VPC com uma única sub-rede publica: São as VPCs default, aonde podemos liberar o acesso dos recursos para a internet apenas configurando security-group e ACL, por exemplo. A idéia dessa VPC é que qualquer instância pode conversar com qualquer recursos, sendo da AWS ou da Internet.
+	* VPC com sub-rede publica e privada: Nessa VPC podemos ter dois tipos de sub-redes, uma pública (idem a VPC acima) e uma sub-rede privada que não pode receber requisições da internet, apenas das sub-redes da sua própria VPC. Nesse cenário podemos configurar um NAT para permitir que a sub-rede privada converse com a Internet, porém nunca receberá requisições da internet, essa sub-rede pode fazer uma requisição e receber a resposta (por exemplo, atualização do SO) porém nunca receberá uma requisição de fora da sua VPC.
+	* VPC com sub-rede pulica e privada e com VPN: +/- igual a "VPC com sub-rede publica e privada", porém podemos configurar uma VPN para que um host (ou um data center) possa fechar conexão com a sub-rede privada via VPN, sendo assim a sub-rede privada continua não recebendo requisições da internet, exceto via VPN
+	* VPC com sub-rede privada e com VPN: +/- igual a "VPC com sub-rede pulica e privada e com VPN", porém podemos não possui uma sub-rede publica, apenas a privada com o túnel configurado.
+	
+	Na criação da VPC as sub-redes, NATs, DHCP, ACL são criadas automaticamente.
+	
+	Para criação de "VPC com sub-rede privada e com VPN:" ou "VPC com sub-rede pulica e privada e com VPN" consulte o curso https://cursos.alura.com.br/course/amazon-vpc/task/46105
+	
+	
+Nat gateway | Elastic IP Allocation:
+	O NAT gateway é aonde configuramos o roteamento da nossa rede privada (dentro da VPC) para a rede externa. O NAT gateway não configura o inbound, apenas o outbound
+	Pra isso é necessário alocar um IP para essa configuração
+	
+	
+	filipe@winixtech.com.br
+
+
+	

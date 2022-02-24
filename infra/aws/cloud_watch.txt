@@ -1,0 +1,65 @@
+Monitação da aplicação e dos recursos na AWS
+
+O que fornece:
+	logs
+	Métricas
+	Custos
+	Alarmes
+	
+Nos dashs podemos configurar os nossos monitoramentos, a AWS fornece várias métricas que podemos utilizar para criar os dash.
+As métricas serão exibidas desde que possui recurso ativo que possa ser metrificados, por exemplo, se não tiver nenhuma instância do EC2, então não será disponibilizado métricas de EC2.
+
+Em alarmes, iremos definir o que devemos nos preocupar, o que deve ser avisado imediatamente para uma pessoa ou time. Não é obrigatório criar triggers para notificações, mas podemos configurá-los utilizando o SNS. Idem ao dash, as métricas somente serão exibidas quando o recurso estiver disponível.
+
+Em Eventos funciona +/- igual ao Alarmes, porém podemos ser mais flexívies e trabalhar com um evento que ocorreu ou um período agendado. Por exemplo podemos configurar para invocar um lambda quando um estância desligar, ou escrever em tópico SNS quando alterar o volume de uma EBS, a possibilidade aqui é maior
+Em events podemos configurar um Event Pattern e definir o target, também podedmos criar um Schedule para ser executado de tempo em tempo.
+O targets é o alvo do nosso evento, por exemplo, você vai definir um evento de "Desligando" a EC2, assim que esse evento for disparado, você vai definir qual a ação que o seu Evento deve tomar configurando o targets.
+Em targets podemos configurar uma fila, um Lambda etc. Para configurar um lambda, você deve primeiro criar o seu lambda depois é só selecioná-lo em Events / Rules
+
+Em Logs, podemos centralizar os logs das nossas aplicações/instâncias em um único local, assim podemos fazer consultas centralizadas utilizando queries.
+Pra isso precisamos seguir os seguintes passos: https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/QuickStartEC2Instance.html
+	Primeiro, no IAM, criar um usuário com permissão para o ARN de logs, ou adicionar em um usuário existente
+		Criar uma politica, validar na doc da aws. Obs.: Pegar o access_key do usuário
+		https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/iam-identity-based-access-control-cwl.htm
+			{
+			  "Version": "2012-10-17",
+			  "Statement": [
+				{
+				  "Effect": "Allow",
+				  "Action": [
+					"logs:CreateLogGroup",
+					"logs:CreateLogStream",
+					"logs:PutLogEvents",
+					"logs:DescribeLogStreams"
+				],
+				  "Resource": [
+					"arn:aws:logs:*:*:*"
+				]
+			  }
+			 ]
+			}
+	Instalar e configurar o agente na instância, quando SO Ubuntu
+		sudo apt-get update
+		curl https://s3.amazonaws.com/aws-cloudwatch/downloads/latest/awslogs-agent-setup.py -O
+		sudo python ./awslogs-agent-setup.py --region us-east-1
+			Informar o access_key do usuário de log
+			Em "Path of log file to upload", informar o abbsolute path do log
+			Em "Destination Log Group name" informar o grupo que deseja que seja exibido no cloudWatch
+			Após configuração será questionado se deseja configurar novo log
+	Para configurar o Agente Unificado, utilize https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/UseCloudWatchUnifiedAgent.html
+	
+	
+Métrica customizada
+	Podemos criar nossas métricas customizadas a partir dos nossos logs.
+	Selecione o groupLog que você criou / criar métrica e filtro
+	Aqui vai precisar conhecer o log para informar qual o pattern que será pesquisado, podemos colocar condição
+		Exemplo para o access.log do Apache: [IP, clientMachine, remoteUser, Date, URI, statsCode=404, size, header, userAgent]
+	Ao criar uma métrica, é necessário alguma iteração para criar um evento novo, somente assim a métrica será exibda
+
+Dash com metrica customizada
+	Abra o dash / add widget
+	Se você cadastrou em um namespace customizado, irá ser exibido no namespace que você criou
+			
+
+CloudFormation
+

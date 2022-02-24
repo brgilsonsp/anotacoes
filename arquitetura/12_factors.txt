@@ -1,0 +1,49 @@
+1º Case de código
+	Uma base de código com rastreamento utilizando controle de revisão, muitos deploys
+	Cada artefato deve ser identificado no repositório.
+		Como rastrear determinado artefato no código?
+		É mais produtivo por TAG ou BRANCH?
+		Como forçar a trabalhar com um WIP?
+		Como automatizar um WIP para que ao fecha-lo:
+			Ao fechar um WIP já versione o código e crie uma TAG
+			Não permita alteração na determinada TAG ou BRANCH
+			Gerar um artefato e publicá-lo
+2º Dependências
+	Declare e isole explicitamente as dependências
+	No Java o POM.XML junto com o Maven já faz esse serviço, no C# seria o csproj junto com o Nuget
+	
+3º Configuração
+	Armazene as configurações do ambiente
+	Separação entre configuração e código. Configuração de infra estrutura ou credenciais, por exemplo
+	Ser possível abrir o código ao público e não expor as credenciais, por exemplo
+	Não se aplica a configuração do código, por exemplo, configuração de um filtro do Spring
+	
+4º Seriços de Apoio
+	Trate os serviços de apoio como recursos anexadoss
+	Intrisicamente ligado ao 3º Configuração
+	Todos serviços externos são somente plugados via configuração(3º), podendo ser substituido a qualquer momento sem impacto no código
+	Permitir um desacoplamento do vendor
+	Ser capaz de substituir um serviço (com o mesmo contrato) sem necessidade de alterar o código
+	Exemplo, substituir um MySQL por AWS RDS apenas alterando as configurações de acesso
+	
+5º Construa, lance e execute
+	Separe estritamente os estágios de construção, lançamento e execução
+	Um base de código é transformado em um pacote possível de deploy em um ambiente não desenvolvimento
+	Para efetuar o deploy no seu respectivo ambiente, considere separar nos seguintes estágios:
+		- Estágio de construção: Deve gerar um artefato apartir do repositório de um determinado commit/tag. Nesse estágio será construindo 
+		um pacote com as suas dependências e binários.
+		- Estágio de lançamento: Junta o artefato da construção e junta com a sua respectiva configuração(3º) e insere um versão. Uma versão 
+		lançada não pode ser alterada, qualquer alteração no código ou configuração(3º) deve reiniciar o ciclo. O resultado é o app.
+		- Estágio de execução: Roda o app no ambiente de exeução através do início de alguns processos(6º) com um determinado lançamento. Um 
+		lançamento fornece gestão dos artefatos do estágio de laçamentos, fornecendo a possíbilidade de se reverter para um lançamento prévio.
+		Exemplo ferramenta de deploy Capistrano que armazena um diretório chamado "releases" os lançamentos, onde possível um link simbólico
+		oara o diretório de lançamento atual, quando usa o comando "roolback" é fácil de reverter para um lançamento prévio
+		
+6º Processos
+	Execute aplicações com um ou mais processos que não armazenam estado
+	O app deve ser stateless e share-nothing
+	A memória ou sistema de arquivos do processo, deve ser utilizado apenas para o contexto do seu processo, por exemplo, armazenar o download
+	que o processo está efetuando para alguma execução, mas esse download não deve ser compartilhado, se for necessário compartilhá-lo com outros 
+	processos então deve utilizar um sistema statefull, por exemplo, um memcached/redis/DB
+	
+	

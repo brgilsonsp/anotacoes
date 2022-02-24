@@ -1,0 +1,5 @@
+Merge vs Rebase
+    Merge: cria um novo novo commit que faz a junção dos código entre duas branchs
+        Quando sincroniza, precisa verificar as duas branchs para entender o flow
+    Rebase: sincroniza/pega os commits da outra branch e reaplica os novos commits da branch atual. Dessa forma, ele reescreve o histórico da branch atual
+        Os commits aparecem como eles fossem executados um após do outro.

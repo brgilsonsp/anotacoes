@@ -1,0 +1,49 @@
+A entrega contínua visa diminuir o risco na hora do deploy do software.
+Para isso as entregas tem que ser:
+    Granular: Deploys menores têm menos risco e são mais fáceis de entender quando dá algum problema.
+    Frequente: Implantações podem ser muito complexas e difíceis, e justamente por isso devemos repetí-las, para deixar o processo seguro e confiável. Isso também é conhecido como Frequência reduz a dificuldade.
+    Automatizada: É essencial automatizar o máximo possível, desde a criação dos ambientes, instalação do software, configuração e execução dos testes.
+    integração contínua: Sem a entegração contínua não é possível uma entrega contínua
+
+
+Papiline de deploy  
+    Desing >> Build >> Test >> Perform >> Homol >> Prod
+
+
+AntiPatterns
+    1. Gerenciamento manual de ambientes
+        Cada ambiente precisa ser configurado e reconfigurado, e temos vários. Deveria ser fácil destruir o pipeline e reconstruí-lo com a mesma facilidade. Se etapas que já são complexas forem executadas manualmente teremos a presença de erros e inconsistências. Há casos em que o deploy funcionou em ambiente de homologação, mas não de produção, e é importante mencionar que são ambientes muito similares.
+        O mesmo pode ocorrer dentro do ambiente de produção, por exemplo o cluster, que possui várias máquinas envolvidas. Se as máquinas não forem idênticas a medida que o software se expande complexifica, teremos problemas. Isso ocorreu porque algo foi aplicado manualmente.
+        A regra de ouro é: Todos os ambientes são tratados como código, versionados e criados de maneira automatizada.
+    2. Deploy manual
+        Geralmente temos um manual que define as etapas de um deploy, mas geralmente a aplicação evolui e a documentação não é mais precisa e real. Há desenvolvedores que não sabem como o deploy é de fato realizado, afinal é um fazer delegado a poucas pessoas dentro da empresa em algumas configurações de equipe. Os deploys podem ser lentos e durarem horas ou dias. Nessa configuração teremos um deploy vagaroso, sujeito a erros e não confiável.
+        A regra de ouro é: apenas duas tarefas devem ser executadas manualmente: escolher a versão do release e o clique em "deploy buttom.
+        Dessa maneira qualquer pessoa da equipe pode realizar o deploy, o resto é automatizado, encapsulado e seguro.
+    3. Deploy apenas no fim do ciclo
+        Por exemplo, os desenvolveremos em aplicações estáveis e grandes focam em testes de criação de novas features e não interagem com a equipe de produção. Dessa maneira não sabemos se as novas features serão de fato funcionais e estáveis em produção.
+        Desse modo, teremos como resultado uma equipe pouco integrada, os problemas serão avistados apenas no dia da plubicação, e isso torna o processo mais lento.
+        A regra neste caso é: deployment faz parte do desenvolvimento desde a primeira interação, todos definem um delivery team.
+        Conhecemos três antipatterns clássicos que atrapalham a agilidade da construção de um projeto confiável. Devemos portanto ter:
+            Gerenciamento automatizado de ambientes
+            Deploy automatizado
+            Deploy frequente em cada ciclo de desenvolvimento
+
+Entregar software com alta qualidade e grande valor, de maneira eficiente, rápida e confiável"
+    A métrica principal é o software executável que satisfaz o cliente. O deploy não deve ser algo complexo ou extraordinário, sim algo simples,fácil e de baixo risco.
+
+Princípios básicos
+    I. Automatize: Automatizar também faz parte da integração contínua
+    II. Versione: Versionar é importante não só para o código, mas tudo que é relacionado aos ambientes e testes.
+    III. Repita:  importante repetir o deploy, não devemos deixar para realizá-lo no fim de semana depois de três alterações.
+    V. Defina "done": 
+    VI. Crie delivery team: criar uma equipe de entrega com desenvolvedores, analistas, operation e assim por diante
+    VII. Use melhoria contínua: cada etapa do pipeline tenha feedbacks rápidos sobre o estaus do software.
+
+
+Elementos principais
+    1. Cultura DevOps Ela envolve: feedback, colaboração, confiança, melhoria e aprendizagem contínua.
+    2. Patterns São os padrões de deploy, ou releases de baixo risco. Nós ainda discutiremos esse assunto ao longo do curso, alguns padrões são blue/green, canary, feature toggle e outros.
+    3. Arquitetura A arquitetura é uma fase importante, pois quando falamos sobre arquitetura estamos mencionando a estrutura do sistema. As decisões estruturais são as mais difíceis dentro de um projeto, é necessário que ela seja estipulada no começo do trabalho. Quando pensamos na arquitetura queremos definir testabilidade, estabilidade, desempenho e outras propriedades como deployability.
+        Quanto melhor for a arquitetura do sistema, mais fácil será praticarmos entrega contínua. Se existem dificuldades em recriar o ambiente de produção isso influencia a testabilidade, afinal devemos criar um clone da produção para que o teste seja possível.
+        O mesmo se dá com o deployability. Se a base de código é muito grande, sentiremos dificuldade em inserir elementos na fase de produção. Nesta fase entram as boas práticas e os serviços e uma melhor base de dados.
+

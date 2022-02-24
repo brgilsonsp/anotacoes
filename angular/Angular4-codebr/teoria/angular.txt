@@ -1,0 +1,13 @@
+*ngIf="condição" >> faz uma condição se o elemento será ou não exibido
+Exemplo:
+<div>
+  Student:{{student.name}}
+  <div *ngIf="student.isJedi">
+    Jedi Temple: {{student.temple}}
+  </div>
+</div>
+
+*ngFor="let variavelLocal of nomeArray" >> faz um loop for em todos elementos do array "nomeArray", inserindo cada elemento na variável 
+"variavelLocal".
+Exemplo:
+<jad-student *ngFor="let student of students" [student]="student"></jad-student>

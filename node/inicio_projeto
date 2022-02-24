@@ -1,0 +1,33 @@
+Instalar
+  NodeJs
+  npm
+
+Instalar para a aplicação
+  * express
+  * nodemon: Apenas para dev, ferramenta para autoreload https://www.npmjs.com/package/ nodemon
+    Configurar o script, dentro no package.json
+    Para executar use npm start
+  * consign: Carrega os arquivos dentro do express https://www.npmjs.com/package/consign?activeTab=readme
+  * body-parser: Parseia o body para um tipo específico https://www.npmjs.com/package/body-parser
+  * moment: gestão de datas
+  * dotenv: Para leitura de varíaveis de ambientes. Deve criar o arquivo ".env" no root do projeto, ou passar os valores para o SO. https://www.npmjs.com/package/dotenv
+
+
+Segurança  
+  * bcrypt: Criptografia https://www.npmjs.com/package/bcrypt
+  * passport: Middleware para implementar as estratégias que serão utilizadas para autenticação https://www.npmjs.com/package/passport. Verifique na documentação as estratégias que você irá utilizar
+  * jsonwebtoken: Middleware para gerar e validar token JWT, Precisamos criar apenas o payload pois o cabeçalho é criado pela API. https://www.npmjs.com/package/jsonwebtoken
+  * passport-http-bearer: Estratégia de autenticação para validação do token bearer JWT. http://www.passportjs.org/packages/passport-http-bearer/
+
+
+
+Persistencia
+  * Redis: https://www.npmjs.com/package/redis
+
+
+
+módulos
+  * Transforma uma função que espera callback em um promise
+    const { promisify } = require('util');
+
+

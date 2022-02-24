@@ -1,0 +1,104 @@
+--------------- Images ---------------
+docker pull <NAME_OR_ID_IMAGE> == Faz o download da imagem do repositório
+
+docker images == Lista as imagens baixadas
+
+docker rmi <NAME_OR_ID_IMAGE> == remove a imagem
+
+docker build -f <NOME_ARQUIVO_DOCKERFILE> -t <<NOME_IMAGEM>> <LOCAL_APARTIR_DE_ONDE_QUE_SERA_CRIADO_A_IMAGEM> >> cria uma imagem. o 
+	-f: caminho do arquivo Dockerfile que será executado
+	-t: define o nome da image use usuario/nome_imagem que será persistido no repositório, exemplo, gilsonsouza/node 
+	<LOCAL_APARTIR_DE_ONDE_QUE_SERA_CRIADO_A_IMAGEM>: define a partir do local que deseja criar a imagem, se for criar a partir do diretório corrente, inserir o "." caso contrário informar o local absoluto
+
+docker push <NOME_IMAGEM >> envia a imagem para o Docker Hub. Necessário login no Docker Hub
+
+docker pull <NAME_OR_ID_IMAGE >> Donwload da <NAME_OR_ID_IMAGE>
+
+docker history <NAME_OR_ID_IMAGE>
+
+	************** Exemplos comandos **************
+
+
+--------------- Container ---------------
+docker run -it <NAME_OR_ID_IMAGE> == Inicia um container. -i container interativo, -t anexar o terminal do container ao nosso host. Se desejar executar comando dentro do container, informe o comando após <NAME_OR_ID_IMAGE>
+	-d: executa o container sem atrelar o seu terminal ao nosso terminal, liberando o terminal
+	-P: configura uma porta aleatória do nosso host com a porta interna do container
+	-p <PORT_HOST>:<PORT_CONTAINER>: Configura uma porta específica do seu host com a porta do container
+	--name <NAME_OF_THE_YOUR_CONTAINER>: configura um nome para o container
+	-e <ENVIRONMENT_VARIABLE>=<VALUE>: configura uma variável de ambiente e seu valor
+	-v "<CAMINHO_FISICO:CAMINHO_CONTAINER> == configura um volme <CAMINHO_CONTAINER> no container apontando para o <CAMINHO_FISICO>, os arquivos ficarão armazenados no <CAMINHO_FISICO> mesmo após matar o container
+	--mount type=bind,source=<DIRETORIO_FISICO>,target=<DIRETORIO_CONTAINER> == idem ao -v, cria um bind entre o diretório fisico definido em source com o ditório do container definido em target
+	--mount source=<VOLUME_DOCKER>,target=<DIRETORIO_CONTAINER> == cria um bind entre o <VOLUME_DOCKER> com o <VOLUME_CONTAINER>
+	--mount type=tmpfs,target=<DIRETORIO_CONTAINER> == cria um bind entre a memória RAM, um diretório temporário, com o <VOLUME_CONTAINER>
+	-w "<DIRETORIO_QUE_SERA_INICIADO>" == permite iniciar o container a partir de um diretório específico, por exemplo uma imagem do ubuntu inicia no volume do usuário, inserindo esse caminho, assim que subir o container será acessando o diretório configurado
+	
+	
+docker ps == exibe containers ativos. Utilize o --help para verificar as opções de exibição de containers
+	-q: exibe apenas os ids
+	-a: exibe todos os containers
+	
+docker rm <NAME_OR_ID_CONTAINER> == remove os containers. Utilize o --help para verificar as opções de removação
+	docker rm $(docker ps -qa) == Remove todos os containers
+	
+docker container 
+	prune == remove todos os container inativos
+	ls == lista todos containers ativos
+		-a == lista todos containers, ativos ou não
+		-s == exibe total de memória ocupada
+
+docker start <NOME OU ID DO CONTAINER> >> Iniciar container criado
+	-a: inicia o container com o terminal do container atachado do terminal do host
+	-i: inicia o container com o terminal do container iterativo
+	docker start -a -i <NOME OU ID DO CONTAINER>
+	
+docker stop <NAME_OR_ID_CONTAINER> == para o container
+	$(docker ps -q): para todos os containers que estão ativos, pois fará a interpolação de comandos docker
+
+docker exec -it <NOME_CONTAINER> <COMANDO>  >> executa o <COMANDO> no container <NOME_CONTAINER>
+
+CTRL+P+Q >> Quando quiser sair do moto iterativo de um container sem encerrá-lo
+
+	************** Exemplos comandos **************
+	docker run -d -p 3000:3000 -v '<VOLUME_HOST:VOLUME_CONTAINER>' -w '<VOLUME_CONTAINER>' node npm start == Inicia um container com o terminal desatachado (-d) configurando a porta 3000 do host com a porta 3000 do container (-p 3000:3000); configura um volume do host apontando para um volume do container (-v '<VOLUME_HOST:VOLUME_CONTAINER>'); inicia o container em um volume específico (-w '<VOLUME_CONTAINER>'); uma imagem do node (node); executa o comando (npm start)
+	docker rm -f <NAME_OR_ID_CONTAINER>
+	docker exec -it <CONTAINER_1> ping <CONTAINER_2> ==  dispara um ping do <CONTAINER_1> contra o <CONTAINER_2>
+	docker exec -it <ID_CONTAINER_ALPINE> sh >> executa o terminal da imagem do Alpine
+	
+	
+--------------- Rede ---------------
+docker port <NAME_OR_ID_CONTAINER> == exibe a configuração das portas do container
+docker network create --driver <DRIVER> <NOME_DA_REDE> >> Cria uma rede utilizando o driver desejado (exemplo bridge)
+	Driver bridge >>, escopo local, comunicação entre os containers em um mesmo host/nó
+	Driver host >> escopo local, comunicação entre o container e o host/nó
+	Driver overlay >> escopo do swarm, é criado no momento que inicia um swarm para a comunicação entre os containers de cluster, ou seja, podendo estar em host/nó diferentes, inclusive o driver é compartilhado entre os containers que estão no mesmo swarm. Ele também criptograda a comunicação entre os containers
+	Redes overlays criadas manualmente (User-Defined Overlay) permitem a comunicação entre serviços por seus nomes (Service Discovery)
+	As redes criadas com o driver overlay são listadas de maneira lazy para workers
+	
+
+	************** Exemplos comandos **************
+
+
+--------------- Volume ---------------
+Cria e gerencia volumes docker
+https://cursos.alura.com.br/quais-sao-os-tipos-de-armazenamentos-no-docker--c134
+docker volume create
+
+	************** Exemplos comandos **************
+	
+--------------- Configuração ---------------
+docker inspect <NAME_OR_ID_CONTAINER / NETWORK> == exibe informações do container, tipo o dockerfile
+docker login == login no Docker Hub
+
+
+
+	************** Exemplos comandos **************
+
+--------------- Docker Compoese ---------------
+obs.: os comandos abaixo precisam ser executados no diretório do docker-compose, ou informar o caminho completo do docker-compose'
+docker-compose build >> cria as imagens do docker-compose
+docker-compose up >> sobe os containers do docker-compose
+docker-compose up -d >> sobe os container do docker-compose e libera o terminal
+docker-compose down >> derruba os containers que foram criados pelo docker-compose.yml
+
+	************** Exemplos comandos **************
+	

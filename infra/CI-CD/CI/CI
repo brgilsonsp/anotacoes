@@ -1,0 +1,88 @@
+Para uma boa CI, devemos garantir
+    merge diário, features branchs de vida curta
+    Testes automatizados: teste Unitário, teste de integração, testes funcionais, nessa ordem
+    Build automatizado: 
+        Etapas: Clean>>Compile>>Unit Testes>>Static Analysis>>Package softweare>>Integrate Databases>>...
+        BUild a cada commit
+        Etapdas automatizadas
+        Build sem depender da IDE
+        Tudo deve estar no repositório
+        Build no máximo de 10 minutos, build que falha rápido para poder corrigir rápido
+        Otimize o build, métricas ajuda: uilds lentos vão afetar negativamente a integração contínua, atrasando commits e diminuindo o feedback. Otimize o build para receber feedback mais rápido!
+            Verifique a base testes e análise do código
+            verifique a ordem dessas fases, por exemplo, testes funcionais depois do unitários
+            verifique a infra do build system
+            utilizar cache
+        Use ferramentas para automatizar o build, não refaça a roda
+        Single command build:  build deve ser simples de executar, idealmente através de um único comando (single command build).
+
+
+Ferramentas de automação e construção, separado por linguagem/plataforma:
+    Java: Ant, Maven, Gradle
+    Front-end: Gulp, Grunt, Webpack
+    .NET: MSBuild
+    Ruby: Rake
+    Kotlin: Gradle
+    Clojure: Leiningen
+    C/C++: CMake/Make
+    PHP: Composer
+
+E alguns frameworks famosos da área de teste:
+    Selenium (automação do navegador)
+    Cucumber (testes de aceitação)
+    Postman e SoapUI (testes de API)
+    JMeter (stress tests)
+    JUnit, xUnit, PHPUnit (automação de testes)
+    entre muitos outros frameworks e bibliotecas
+
+Para o configuration management e provisioning podemos mencionar:
+    Ansible
+    Puppet
+    Chef
+    Salt
+    Terraform (cloud)
+    O configuration management / provisioning é sobre a instalação e manutenção da maquina.
+
+
+
+CD Daemon - Servidor de integração
+    Esse servidor irá garantir que a cada modificação seja realizado um novo teste, então o repositório é sempre checado e builds contínuos são uma realidade.
+    A prática de integração contínua não especifica que o CI Daemon é necessário, mas hoje em dia podemos considerar como uma obrigação nos projetos. Contudo, só porque utilizamos um server desas natureza estamos praticando integração contínua, uma ação é realizada por pessoas.
+    O CI Daemon realiza builds contínuos e notifica os desenvolvedores se alguma alteração se deu corretamente ou não. Normalmente esses softwares já possui um test board que oferecem os dados do build, então as informações e relatórios são de fácil acesso.
+    Existem alguns serviços no mercado que podem ser instalados localmente, o Jenkins é um exemplo. Existem também serviços na nuvem já associados. É importante que apenas que o servidor realize buidls a cada commit e notifique os desenvolvedores de maneira clara e funcional.
+    Alguns servidores oferecem o private build, que possibilita o desenvolvedor a fazer uma observação do repositório e testa-lo antes da produção, com um build mais completo.
+
+
+Exemplos de servidores de integração
+    Jenkins (https://jenkins.io/)
+    GoCD (https://www.gocd.org/)
+    Bamboo (https://www.atlassian.com/br/software/bamboo)
+    Travis CI (https://travis-ci.org/)
+    Team City (https://www.jetbrains.com/teamcity/)
+    Circle CI (https://circleci.com/)
+    Gitlab (https://about.gitlab.com/product/continuous-integration/)
+    AWS Code Pipeline https://aws.amazon.com/codepipeline/
+    Azure (https://azure.microsoft.com/pt-br/services/devops/server/)
+    entre outras possibilidades!
+
+
+A Certificação do CI
+    1. Você "comita" diariamente o seu código no "mainline" do projeto?
+    2. Build e testes rodam automatizados e trazem confiança que o software está correto?
+    3. Quando um build quebra, a equipe o conserta rapidamente? Tempo ideial de 10 minutos.
+
+
+A integração contínua suporte o time a efetuar uma entrega contínua de qualidade,
+pois uma feature não deve ser impedida tecnicamente de ser publicada após o merge com
+o trank (branch master), mas sim estar disponível para uso
+Precisamos andar com os princípios Ageis
+    "Working software over comprehensive documentation"
+    "Our highest priority is to satisfy the customer through early and continuous delivery of valuable software."
+
+
+DevOps
+    Discutimos sobre as equipes que trabalham divididas, com muros materiais imateriais. A velocidade de equipes pode ser medida por meio de tarefas que são implementadas, essa é uma ideia.
+    Por outro lado, a equipe de operações valoriza a estabilidade, afinal cada alteração é uma possível causa de problemas. O operacional deseja controlar o ambiente de produção. Temos diferenças importantes na forma de trabalho: um preza velocidade em novas funcionalidades e outro estabilidade.
+    As equipes precisam trabalhar em conjunto para conseguir chegar à entrega contínua e ter um softaware funcional em ambiente de produção.
+    DevOps é um movimento cultural que fisa a integração e otimizar o processo de aprendizagem entre os integrantes da equipe. DevOps não é um título de cargo, mas uma visão de organização de trabalho que visa criar um pipeline veloz, seguro e integrado.
+    Precisamos, claro, de ferramentas que irão facilitar as integrações e monitoramento, mas é muito mais um movimento culturao do que uma aparelhagem técnica.

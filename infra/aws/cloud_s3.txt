@@ -1,0 +1,19 @@
+S3
+É um web store que fornece ferramentas e APIs
+https://docs.aws.amazon.com/pt_br/AmazonS3/latest/userguide/Welcome.html
+
+É possível versionar os objetos no bucket
+Ao remover um arquivo versionado, se subirmos um novo objeto com o mesmo nome, é possível verificar todos objetos que foram versionados
+
+Os valores variam de acordo com a classe utilizada para o objeto
+Podemos configurar um Intelligent-Tiering Archive para controlar o ciclo de vida dos objetos, podendo alterar de classes após determinado período, por exemplo, isso beneficia quando um objeto vai perdendo o seu objetivo e/ou finalidade com o passar do tempo, por exemplo, um arquivo de log
+
+HTML estático
+	Um bucket no S3 nos permite ter uma nova opção acessada através de Properties, no caso, Static Website Hosting
+		Permite que um bucket sirva com um simples servidor, sem a necessidade de implementar uma tecnologia de backend.
+		É através da opção Use this bucket to host a website que indicamos qual será a página HTML ponto de entrada e qual página de erro será devolvida em caso algum problema aconteça.
+		É necessário configurar as permissão dos arquivos htmls
+	Ao utilizar esse serviço, considere antes o CloudFront: https://aws.amazon.com/pt/cloudfront/
+	
+	
+

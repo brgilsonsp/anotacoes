@@ -1,0 +1,11 @@
+CloudFront é uma solução CDN: https://aws.amazon.com/pt/cloudfront/
+Uma CDN (Content Delivery Network - Rede de Entrega de Conteúdo) é uma plataforma de servidores altamente distribuída que ajuda a minimizar atrasos no carregamento de conteúdo de páginas da Web, reduzindo a distância física entre o servidor e o usuário.
+É uma rede de servidores (pontos de presença) que armazenam réplicas do conteúdo (arquivos estáticos) de outros sites na memória (cache) e depois os entrega aos visitantes, baseando-se na localização geográfica para conectá-los ao servidor mais próximo e mais rápido, reduzindo o tempo de transferência dos dados (latência).
+Os arquivos estáticos, como por exemplo, JS, CSS, HTML e imagens, não precisam de uma lógica para serem distribuidos, talvez para serem exibidos, porém precisam estar disponíveis para qualquer momento. Nesse cenário, um CDN irá armazenar todos esses arquivos estáticos e quando o client fizer a requisição, o próprio CDN irá fornecê-los, sem a necessidadee do client fazer a consulta diretamente no servidor da aplicação.
+Com isso diminuimos a latência, pois um CDN, em tese, está mais próximo do client do que o servidor da aplicação e também dimunuiremos a carga do próprio servidor de aplicação, que apenas será invocado quando o CDN não encontrar o arquivo.
+No CDN não tem nenhuma lógica, apenas os arquivos estáticos.
+Após configurar o cloudFront, a AWS leva alguns minutos para distribuir o conteúdo entre os pontos de presença. Você deve acessar o conteúdo através do Distribution Domain Name oferecido pelo CloudFront.
+
+Desenho ideal
+	O Client faz a requisição para um DNS; o DNS delega para o CloudFront; o CloudFront entrega os arquivos para o client
+	Client >> DNS >> CloudFront

@@ -1,0 +1,12 @@
+Documentação Spring
+https://docs.spring.io/spring-boot/docs/current/maven-plugin/reference/htmlsingle/#build-image
+
+Exemplo Spring video
+https://www.youtube.com/watch?v=1w1Jv9qssqg
+
+Criar imagem Java para aplicação
+https://gabrielfeitosa.com/como-rodar-uma-aplicacao-java-com-o-docker/
+https://gabrielfeitosa.com/criando-a-imagem-docker-com-o-maven/
+https://medium.com/@fernandoevangelista_28291/criando-e-enviando-imagem-docker-com-java-e-maven-4fa3c70dba0f
+https://www.linkedin.com/pulse/criando-e-enviando-imagem-docker-com-java-maven-fernando-evangelista
+https://gasparbarancelli.com/post/construindo-imagem-docker-em-projetos-java

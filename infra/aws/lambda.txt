@@ -1,0 +1,124 @@
+Lambda
+---------- Conceitos ---------------------------------------------------------------------------------------------------------------------------
+O que é AWS Lambda?
+	Serviço de computação que permite você executar o seu código sem provisionar e gerenciar servidor
+	A AWS gerencia a escalabilidade da infra estrutura e administra todos os seus recursos
+	A AWS gerencia toda a infra estrutura e o monitoramento
+	A AWS gerencia o registro em log do código*****
+	Podemos criar qualquer aplicação respeitando os limites de tempo de execução
+	Podemos utilizar qualquer linguagem de programação compatível
+	A Função executa o código apenas quando necessário
+	É digirido por evento
+	SLA: https://aws.amazon.com/lambda/sla/
+	Fornece alguns recursos para auxiliar no desenvolvimento de aplicações lambda
+		Controles de simultaneidade e escalabilidade
+		Funções definidas como imagens de container
+		Assinatura do código
+		Extensões, como por exemplo, utilizar ferramentas próprias para observabilidade
+		Templates com  esquemas dee funções pré-definidos
+		Proxy de banco de dados que fornece conexões, facilitando a simultaneidade
+		Acesso aos sistems de arquivos, EFS
+	Deve cuidar do consumo de recursos, pois a cobrança é em cima de quantidade de recursos por tempo consumido: https://aws.amazon.com/lambda/pricing/
+	Deve possuir conceitos básicos de:
+		SO Linux, processos, threads e permissões de arquivos
+		Núvem e conceitos de rede
+		Computação distibuída, como HTTP, filas, simultaneidades
+		AWS IAM, AWS KMS e chave pública
+		Serviços que interagem com o Lambda, por exemplo, AWS API gateway
+	Links:
+		Overview: https://docs.aws.amazon.com/pt_br/lambda/latest/dg/welcome.html
+		Produto: https://aws.amazon.com/lambda/
+		Getting-started: https://aws.amazon.com/lambda/getting-started/
+Permissões
+
+Práticas recomendadas
+
+Como configurar uma função
+
+Como gerenciar uma função
+
+Como invocar uma função
+
+Tempos de execução do lambda
+	Cotas lambda
+
+Imagens em container
+
+Lambda com Java
+
+PowerShell
+
+Monitoramento
+
+Segurança
+
+Possíveis problemas
+
+Aplicações do lambda
+
+Orquestrar funções
+
+
+arn:aws:sqs:us-east-1:441380982458:MyLifeQueue
+arn:aws:sqs:us-east-1:441380982458:MyDeadQueue
+https://sqs.us-east-1.amazonaws.com/441380982458/MyDeadQueue
+
+------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+Exercício
+	Criar lambda com java
+	publicar com cli: https://docs.aws.amazon.com/pt_br/lambda/latest/dg/gettingstarted-awscli.html
+
+
+
+
+Para criar uma lambda
+	Lambbda / create function / seleciona o runtime
+	Insere a função / Deploy
+	Na sequencia, você pode criar um teste
+	
+Um lambda possui uma função:
+	//..inicio
+	def lambda_handler(event, context):
+		//.... função
+		
+Para uma lambda (ou qq outro recurso) acessar outro recurso na AWS, é necessário conceder as permissões no IAM, criando/adicionando as policies
+	Localize a rola da lambda em questão
+	Vá em IAM / Roles / Localize a Role da Lambda / Edit
+	Attach Policies e adicione a police desejada
+	
+Podemos configurar um webbook com o Slack, por exemplo:
+Exemplo função lmbda com Python
+	from botocore.vendored import requests
+	import boto3
+	import json
+
+	client = boto3.client('sns');
+	site = 'http://ec2-54-157-221-131.compute-1.amazonaws.comm/';
+
+	web_hook = 'https://hooks.slack.com/services/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';
+	mensagem = {'text': '=====Houston, we have a problem!====='};
+
+
+	def lambda_handler(event, context):
+		try:
+			requests.get(site, timeout=5)
+			print('Site OK!')
+			return 200;
+		except Exception:
+			print('Houston, we have a problem!')
+			envia_notificacao()
+			return 201;
+
+	def envia_notificacao():
+		client.publish(
+		   TopicArn='arn:aws:sns:us-east-1:441380982458:siteOffLine',
+		   Message='=====Houston, we have a problem!=====',
+		   Subject='ALERTA');
+	requests.post(
+			web_hook, 
+			data=json.dumps(mensagem))
+	
+	
+	

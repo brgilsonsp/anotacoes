@@ -1,0 +1,55 @@
+Documentação: https://www.vagrantup.com/docs/index
+Boxes: https://app.vagrantup.com/boxes/search
+
+Curiosidades
+	Ao alterar uma configuração no vagrantfile você deve parar a VM (vagrant halt) e depois subi-la novamente (vagrant up) para aderir as novas configurações
+	O diretório do vagrantfile do host é configurado um bind com o diretório /vagrant da VM, quando utiliza Linux, o box bionic
+	A chave publica fica no .ssh/authorized_keys da VM, quando utiliza Linux
+	O par de chave criado por default fica no <DIR_vagrantfile>/.vagrant/machines/<VM_NAME>/virtualbox/
+	No arquivo .ssh/known_host do host, fica guardado o fingerprint de cada máquina com qual o SSH se conectou
+	A chave pública deve ficar dentro do arquivo .ssh/authorized_keys da VM
+	Quando algum comando travar, verifique nos processos se exsite algo com "ruby" ou "vagrant" e mate-os
+	No mesmo Vagrantfile, podemos configurar várias máquinas, separando as configurações (Multi-Machine)
+	O Puppet é uma ferramenta popular para provisionar uma máquina
+	Provisionamento significa instalar e configurar tudo o que for necessário para rodar algum serviço ou aplicação
+	Com Puppet, podemos definir os passos de instalação de mais alto nível, facilitando a manutenção
+	Os passos de instalação são configurados em um arquivo manifest, com a extensão .pp
+	Para rodar o Puppet, é preciso instalar um cliente na máquina virtual
+	O Vagrant integra e consegue chamar o Puppet a partir do comando vagrant provision
+	Ao rodar o comando vagrant up pela primeira vez, ele também roda o provisionamento
+	Para configurar o Puppet dentro do Vagrantfile, basta usar:
+		config.vm.provision "puppet" do |puppet|
+		  puppet.manifests_path = "manifests"
+		  puppet.manifest_file = "wep.pp"
+		end
+
+Comandos
+
+ * vagrant init <BOX> >> faz o download do box (arquivo vagrantfile) definido em <BOX>
+ * vagrant up >> constrói a virtualização definida no vagrantfile, necessário executar o comando dentro do diretório que está o arquivo vagrantfile, serve para reiniciar a máquina virutal também
+ * vagrant status >> exibi as VMs e seus respectivos status
+ * vagrant ssh >> acessa a máquina virtual
+ * vagrant halt >> desliga a máquina virutal
+ * vagrant halt <ID_VM> >> para obter o id utiliza o global-status
+ * vagrant suspend >> suspende a máquina virual
+ * vagrant relead >> desliga a VM, se houver aplica as novas configurações do vagrantfile e liga a VM
+ * vagrant global-status >> Exibi todas as VMs que o Vagrant criou, independente do diretório do Vagrantfile
+ * vagrant global-status --prune >> Não exibi máquinas desatualizadas
+ * vagrant box list >> lista os box criados
+ 
+ 
+ 
+Configurando acessos - chave SSH
+	Comando executados no diretório do arquivo vagrantfile
+	ssh-keygen -t rsa >> Criar a chave publica e privada 
+	vagrant ssh >> acessar a VM
+	ls /vagrant >> Dentro da máquina virtual, visualize a pasta vagrant que é um compartilhamento da pasta em seu computador local
+	cp /vagrant/id_bionic.pub . >> copie a chave publica para a máquina virtual
+	cat id_bionic.pub >> .ssh/authorized_keys >> insere a chave publica no chaveiro da maquina virutal
+	Sair da máquina virtual
+	ssh -i sua_chave_privada vagrant@seu-ip >> acesse a máquina virtual utilizando o SSH na porta 22
+	
+Ansible
+	executa o ansible informando o inventário (hosts) e o arquivo do scritp (playbook.yml)
+	ansible-playbook -i /vagrant/configs/ansible/hosts /vagrant/configs/ansible/playbook.yml
+	

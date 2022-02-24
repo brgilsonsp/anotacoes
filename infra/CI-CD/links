@@ -1,0 +1,39 @@
+https://www.thoughtworks.com/pt/continuous-integration
+https://www.thoughtworks.com/pt/radar/techniques/decoupling-deployment-from-release
+
+
+https://martinfowler.com/bliki/ContinuousDelivery.html
+https://martinfowler.com/bliki/BranchByAbstraction.html
+https://martinfowler.com/delivery.html
+https://martinfowler.com/bliki/FrequencyReducesDifficulty.html
+https://martinfowler.com/bliki/BlueGreenDeployment.html
+
+
+https://blog.caelum.com.br/branches-e-integracao-continua-o-problema-de-feature-branches/
+https://blog.caelum.com.br/integracao-continua-builds-rapidos-com-grids-e-paralelismo/
+https://blog.caelum.com.br/integracao-continua-deploys-e-aprovacoes-sem-dores-de-cabeca-para-o-cliente/
+
+
+https://trunkbaseddevelopment.com/
+https://trunkbaseddevelopment.com/feature-flags
+
+https://www.atlassian.com/git/tutorials/comparing-workflows/feature-branch-workflow
+
+
+https://guides.github.com/introduction/flow/
+
+
+https://docs.gitlab.com/ee/topics/gitlab_flow.html
+
+
+https://danielkummer.github.io/git-flow-cheatsheet/index.pt_BR.html
+
+
+https://continuousdelivery.com/
+
+
+Livros
+    Continuous Delivery, do Jez Humble
+    DevOps Handbook, do Gene Kim
+    DevOps, da Casa do Código, do Danilo Sato
+
