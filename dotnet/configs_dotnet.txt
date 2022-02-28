@@ -1,0 +1,19 @@
+Configuração básica do CSPROJ para uma solução de command (services, por exemplo)
+	<!-- Solução do tipo services, um serviço que ficará sendo executado em background -->
+	<Project Sdk="Microsoft.NET.Sdk.Worker">
+		<!-- Qual o framework para execução -->
+		<TargetFramework>net5.0</TargetFramework>
+		<!-- Um id da aplicação -->
+		<UserSecretsId>dotnet-CargaBotSfaWorker-24627595-71BE-4DFB-9E47-97173FEFF379</UserSecretsId>
+		<!-- no pacote do build conterá também um EXE, não obrigatório -->
+		<OutputType>Exe</OutputType>
+		<!-- será gerado o artefato para Release -->
+		<Configuration>Release</Configuration>
+		<!-- Versão da aplicação -->
+		<Version>1.1.0</Version>
+		<!-- Caminho que será publicado o artefato -->
+		<PublishDir>bin\Release\net5.0\publish\CargaBotSfaWorker-$(Version)</PublishDir>
+		<!-- Não sei -->
+		<PublishProtocol>FileSystem</PublishProtocol>
+	</Project>
+	

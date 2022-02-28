@@ -1,0 +1,60 @@
+Documentação debug (launch.json) : https://go.microsoft.com/fwlink/?linkid=830387
+Documentação tasks (tasks.json): https://code.visualstudio.com/docs/editor/tasks
+
+Para executar/debugar uma solução dotNet no VS Code, configurar o launch.json e o tasks.json no diretório .vscode no diretório que será executado
+o comando.
+Por exemplo, se abriu a aplicação na solution, então o diretório .vscode será no diretório da solution, caso abra no diretório da aplicação, 
+então o .vscode deverá ser configurado no diretório da aplicação.
+Essa configuração não é versionada, pois pode conter dados sensíveis, como senha, por exemplo, nas variáveis de ambiente.
+
+O launch.json contém as intruções para o build/debug. Já na tasks.json contém as instruções do comando. 
+Por exemplo, você pode configurar um launch para executar uma aplicação, porém precisa que antes seja executado algumas tarefas. Nesse caso
+as instruções de execução ficará no launch.json já as tarefas dos comandos ficará no tasks.json
+
+Exemplo de um launch.json
+	{
+		// Use o IntelliSense para saber mais sobre os atributos possíveis.
+		// Focalizar para exibir as descrições dos atributos existentes.
+		// Para obter mais informações, acesse: https://go.microsoft.com/fwlink/?linkid=830387
+		"version": "0.2.0",
+		"configurations": [
+			{
+				"name": ".NET Core Launch (console)", (um label)
+				"type": "coreclr", (tipo do debugger)
+				"request": "launch",
+				"preLaunchTask": "build", (nome da task que foi configurado no tasks.json)
+				"program": "${workspaceFolder}/bin/Release/net5.0/CargaBotSfaWorker.dll",
+				"args": [],
+				"cwd": "${workspaceFolder}",
+				"stopAtEntry": false,
+				"console": "integratedTerminal"
+			},
+		]
+	}
+	
+Exemplo de um tasks.json
+	{
+		// See https://go.microsoft.com/fwlink/?LinkId=733558
+		// for the documentation about the tasks.json format
+		"version": "2.0.0",
+		"tasks": [
+			{
+				"label": "build",
+				"command": "dotnet",
+				"type": "shell",
+				"args": [
+					"build",
+					"${workspaceFolder}/CargaBotSfaWorker.csproj",
+					// Ask dotnet build to generate full paths for file names.
+					"/property:GenerateFullPaths=true",
+					// Do not generate summary otherwise it leads to duplicate errors in Problems panel
+					"/consoleloggerparameters:NoSummary"
+				],
+				"group": "build",
+				"presentation": {
+					"reveal": "silent"
+				},
+				"problemMatcher": "$msCompile"
+			}
+		]
+	}
