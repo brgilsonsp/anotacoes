@@ -76,6 +76,37 @@ O que é ABAC?
 
 
 
+Variáveis / Conditions / Chaves de condição / pseudo-parametros
+	* Podemos utiliar as Chaves de condição para nos auxiliar com as Conditions das policies. Essas 
+	chaves serão utilizadas para comparar com:
+		- Algum valor que você informou (a sua conta, por exemplo) 
+		- Com uma variável de política, por exemplo "${aws:username}"
+		- Com um pseudo-parametros, caso esteja utilizando Cloudformation/Terraform, por exemplo, 
+		o identificador da sua conta "AWS::AccountId"
+	A AWS possui chaves de condição Global e por serviço
+	* Podemos utilizar as variáveis de políticas para que o IAM identifique em tempo de execução, 
+	qual o valor que deve utilizar. Por exemplo, se você deseja inserir em um Resource para 
+	identificar o nome do usuário, você substitui nome pela chave ${aws:userid}. Você pode usar 
+	as va de políticas em:
+		- Resource
+		- Conditions
+	* O pseudo-parametros devem ser usados apenas com o Cloudformation ou Terraform (ou outra 
+	ferramenta que utiliza o aws cli por baixo dos panos). Diferente das variáveis acima, esse 
+	parametro não pode ser definido no seu modelo, apenas com variável do Cloudformation
 
+	Links:
+		- Pseudo-parametro: https://docs.aws.amazon.com/pt_br/AWSCloudFormation/latest/UserGuide/pseudo-parameter-reference.html
+		- Variáveis de policita: https://docs.aws.amazon.com/pt_br/IAM/latest/UserGuide/reference_policies_variables.html
+		- Chaves de condição global: https://docs.aws.amazon.com/pt_br/IAM/latest/UserGuide/reference_policies_condition-keys.html
+		- Chaves de condição por serviço: Deve verificar na documentação do respectivo serviço, na 
+		coluna 'Chaves de condição', na tabela 'Ação'
 
+Definições de Policy
+	No documento JSON, o atributo "Resource" está ligado ao atributo "Action", ou seja, é necessário
+	verificar no documento "Referência de autorização do serviço" (IAM). Verifique na coluna "Tipos 
+	de recursos" na table Acções, qual o ARN que deve ser inserido em "Resource".
 ------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
